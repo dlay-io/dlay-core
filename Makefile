@@ -9,7 +9,7 @@ default:
 	npm install
 install-model:
 	# Install basic model in couchdb
-	./bin/main apps install models/app.js
+	./tasks/install/db/push
 	
 install:
 	# install lib and cli global
