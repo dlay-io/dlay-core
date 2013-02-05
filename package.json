@@ -3,7 +3,7 @@
   "version": "0.5.0",
   "description": "Software to schedule your tasks",
   "author": "Gabriel de Oliveira Barbosa <manobi.oliveira@gmail.com>",
-  "bin": {"after":"./bin/main"},
+  "bin": {"after":"./bin/worker"},
   "private":true,
   "dependencies": {
 	"commander": "0.x.x",

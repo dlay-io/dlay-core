@@ -60,6 +60,6 @@ program
 		if(!err) console.log(name, ' logs are clear now');
 	});
   });
-//program.parse(process.argv);
+program.parse(process.argv);
 
 module.exports = program;
