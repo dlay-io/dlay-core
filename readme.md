@@ -23,6 +23,8 @@ Ex:
 ## Task
 Schedule document linked to an worker
 Ex:
+
+```javascript
 {
 	worker:manobi,
    date:2011-10-12,
@@ -32,6 +34,7 @@ Ex:
 	},
  	status:"waiting"
 }
+```
 
 Task Statuses
 * waiting
