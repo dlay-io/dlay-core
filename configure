@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+var program = require('commander');
+var config = require('./config');
+var fs = require('fs');
+
+
+console.log('Configure your node-office dabatase connection:');
+console.log('Type new to subscribe or hit enter to use default');
+program
+	.prompt('login: ', function(login){
+		if(login.length > 1) config.login = login;
+		else console.log('using default', config.login);
+		
+		program
+			.prompt('password: ', function(password){
+				if(password.length > 1) config.password = password;
+				else console.log('using default', config.password);
+				
+				program
+					.prompt('host: ', function(host){
+						if(host.length > 1) config.host = host;
+						else console.log('using default', config.host);						
+						
+						program
+							.prompt('port: ', function(port){
+								if(port.length > 1) config.port = parseInt(port, 10);
+								else console.log('using default', config.port);
+								
+								program
+									.prompt('db: ', function(db){
+										if(port.length > 1) config.db = db;
+										else console.log('using default', config.db);
+
+										fs.writeFile('config.json', JSON.stringify(config), function (err) {
+											if (err) throw err;
+											console.log('Database configured');
+											process.exit()
+										});
+									})
+							})
+					})
+			})
+	});

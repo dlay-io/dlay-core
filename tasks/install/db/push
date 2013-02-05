@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+var paths = require('../../paths');
+var config = require(paths.config);
+var models = require('../../models/app.js');
+var couchapp = require('couchapp');
+
+var protocol = 'http://';
+var auth = [config.login, config.password].join(':');
+var host = [config.host, config.port].join(':');
+
+var url = protocol + auth + '@' + host + '/' + config.db;
+couchapp.createApp(models, url , function(app){
+	app.push();
+});

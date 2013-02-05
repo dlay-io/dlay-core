@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+var db = require('../../../lib/db');
+db.create(function(result){
+	if(result) console.log(result);
+});

@@ -1,0 +1,65 @@
+#!/usr/bin/env node
+var program = require('commander');
+var paths = require('../paths');
+var workerMonitor = require('../lib/worker_monitor');
+var fs = require('fs');
+
+process.chdir(__dirname);
+
+program
+  .version('0.0.1');
+
+program
+  .command('start <name>')
+  .description('start and already added worker')
+  .option("-b, --background", "Run a worker in background (as a daemon)")
+  .action(function(name, options){
+	if(options.background){
+		workerMonitor.daemon(name);
+	} else {
+		workerMonitor.start(name);
+	}
+  });
+
+program
+  .command('stop <name>')
+  .description('stop an already added worker')
+  .action(function(name){
+	workerMonitor.stop(name);
+  });
+
+program
+  .command('log <name>')
+  .description('Show log from an worker')
+  .action(function(name){
+	var log = fs.readFileSync(paths.logs + '/' + name + '.log');
+	log = log.toString();
+	console.log(log);
+  });
+
+
+program
+  .command('list')
+  .description('List all workers runing')
+  .action(function(name){
+	fs.readdir(paths.run, function(err, files){
+		var output = files.map(function(file){
+			var name = file.split('.')[0];
+			console.log(name);
+			return name;
+		});
+	});
+  });
+
+program
+  .command('clean <name>')
+  .description('clean worker log')
+  .action(function(name){
+	var log = paths.logs + '/' + name + '.log';
+	fs.unlink(log, function(err, res){
+		if(!err) console.log(name, ' logs are clear now');
+	});
+  });
+//program.parse(process.argv);
+
+module.exports = program;
