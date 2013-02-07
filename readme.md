@@ -123,7 +123,9 @@ module.export = function myFirstAfterJob(task){
 As you can see in the example above your job function have to implement just one argument, called "task", so each time a worker have to execute some job it will send to your function document task for that job execution as an javascript object.
 
 ```javascript
-console.log(task);
+module.export = function myFirstAfterJob(task){
+	console.log(task);
+};
 ```
 
 Will return something like:
@@ -135,7 +137,7 @@ Will return something like:
 }
 ```
 
-The task object is also an event emitter so you should use this object to notify After database about the success or not of the task execution.
+The task object is also an Event emitter, so you should use this object to notify After database, about the success or of the task execution.
 
 ```javascript
 module.export = function myFirstAfterJob(task){
@@ -158,9 +160,11 @@ This software as created to fill some requirements:
 * Easy to monitore
 
 # How it works
-In After there's no big secrets, all magic happens in scheduler class (that can be used as common.js module, to schedule tasks on your program in execution time). In the After core we start a timer with javascript setInterval and emit for every second (1000 mileseconds) all events atached to this time.
+In After there's no big secrets, all magic happens in scheduler class (that can be used as common.js module, to schedule tasks on your program in execution time). 
 
-When all jobs & tasks event are dispached the worker is the reponsible for update couchdb document about the progress.
+We start a timer with javascript setInterval and emit an event for every second (1000 mileseconds).
+
+When all jobs & tasks event are dispatched the worker is the responsible for update couchdb document about the progress.
 
 So when an job is executed the scheduler clear all related data from memory but persist it into couchdb.
 
@@ -168,7 +172,7 @@ If one worker start delayed or falls for any reason, after is smart and prioriti
 
 # Instalation
 
-Create a user in couchdb with name "after" and "after" as password.
+Create a user in Couchdb with name "after" and "after" as password.
 
 ```
 ./configure
