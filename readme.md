@@ -65,7 +65,9 @@ Jobs are special node.js modules executed by workers based on his tasks descript
 You can have how many jobs you want, all started workers are enabled to execute a job.
 
 
-### Creating a task
+# Getting started
+
+## Creating a task
 
 POST the json above to: 
 'http://localhost:5984/tasks'
@@ -84,17 +86,25 @@ POST the json above to:
 
 * Copy the _id field returned in order to check the status later
 
-### Starting a worker
+## Starting a worker
 In terminal do:
 
-```after start manobi```
+```
+ $ after start manobi
+```
 
 Wait until the time informed in task and look the task document
 
-```GET localhost:5984/tasks/:_id
+```http
+GET localhost:5984/tasks/:_id
+```
 
-### Creating more jobs
+It should have the done status now.
+
+## Creating more jobs
 SOON
+
+
 
 # Philosofy
 This software as created to fill some requirements:
