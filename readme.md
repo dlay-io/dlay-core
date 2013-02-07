@@ -40,9 +40,9 @@ Every task in stored in an couched database and have the following properties:
 |worker       | Name of task owner after worker      |
 |date         | Date and time to execute task (UTC)  |
 |job          | Name of job to executed in this task |
-|status       | Status of this task, if you want to  |
-              the worker process your task you have
-               to start it with status "waiting"   
+|status       | Status of this task, if you want to  
+               the worker process your task you have
+               to start it with status "waiting"      |
 
 
 
