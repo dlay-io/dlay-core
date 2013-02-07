@@ -42,12 +42,17 @@ Every task in stored in an couched database and have the following properties:
 |job          | Name of job to executed in this task          |
 |status       | Status of this task, if you want to the worker process your task you have to start it with status "waiting"  |
 
+Full list of status:
 
-
-worker
-date
-job
-status
+| Status    | Description                                      |
+|-----------|--------------------------------------------------|
+| waiting   | Task is waiting to be scheduled or to be executed|
+| scheduled | Workers will mark tasks as scheduled when they put it in memory to execute in the in the task date attribute      |
+| done      | This status means that this task have been already executed                                                       |
+| err       | Something doesn't work in the execution of job specified in the task                                          |
+| reschedule| Use it to delay or to forward a task that is already scheduled                                              |
+| cancel    | When marked as "cancel" worker will remove this task from his execution list                                   |
+| canceled  | Used by workers to mark an task as canceled      |
 
 ## Worker
 Workers are a job executor, you can have a lot of workers, each one doing one type of task.
@@ -65,7 +70,7 @@ You can have how many jobs you want, all started workers are enabled to execute 
 
 Ex:
 
-```javascript
+```json
 {
 	worker:manobi,
    date:2011-10-12,
@@ -76,16 +81,6 @@ Ex:
  	status:"waiting"
 }
 ```
-
-Task Statuses
-* waiting
-* schedule
-* scheduled (worker only)
-* done
-* err
-* reschedule
-* cancel
-* canceled (worker only)
 
 
 # Requirements
