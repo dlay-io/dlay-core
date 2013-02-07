@@ -75,7 +75,7 @@ You can have how many jobs you want, all started workers are enabled to execute 
 
 ## Creating a task
 
-POST the json above to: 
+POST the json below to: 
 'http://localhost:5984/tasks'
 
 ```json
@@ -108,7 +108,44 @@ GET localhost:5984/tasks/:_id
 It should have the done status now.
 
 ## Creating more jobs
-SOON
+After jobs are stored in a particular folder of your system, by default in user/local/etc/after
+
+If you have some experience working with node.js create new jobs will be extremely easy for you.
+
+Basically you have to expose a function as the job itself:
+
+```javascript
+module.export = function myFirstAfterJob(task){
+	//do something here
+};
+```
+
+As you can see in the example above your job function have to implement just one argument, called "task", so each time a worker have to execute some job it will send to your function document task for that job execution as an javascript object.
+
+```javascript
+console.log(task);
+```
+
+Will return something like:
+
+{
+	worker: "manobi",
+	date: "2012-02-2013",
+	
+}
+
+The task object is also an event emitter so you should use this object to notify After database about the success or not of the task execution.
+
+```
+javascript
+module.export = function myFirstAfterJob(task){
+	if( doSomething()){
+		task.emit('done');
+	} else {
+		task.emit('error');
+	};
+};
+```
 
 
 
