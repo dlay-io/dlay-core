@@ -128,16 +128,16 @@ console.log(task);
 
 Will return something like:
 
+```javascript
 {
 	worker: "manobi",
 	date: "2012-02-2013",
-	
 }
+```
 
 The task object is also an event emitter so you should use this object to notify After database about the success or not of the task execution.
 
-```
-javascript
+```javascript
 module.export = function myFirstAfterJob(task){
 	if( doSomething()){
 		task.emit('done');
@@ -153,7 +153,7 @@ module.export = function myFirstAfterJob(task){
 This software as created to fill some requirements:
 * Just one port exposed (couched 5985)
 * Extensible
-* Distribuided
+* Distributed
 * Faul tolerant
 * Easy to monitore
 
