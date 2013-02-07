@@ -3,32 +3,6 @@ Schedule your tasks over http
 
 A multi-worker task scheduling tool backed by Couchdb and Node.js.
 
-```
-Usage: After [options] [command]
-
- Commands:
-
-   start [options] <name>
-   start a worker with the given name
-   
-   stop <name>
-   stop some worker
-   
-   log <name>
-   Show log from an worker
-   
-   list 
-   List all workers runing
-   
-   clean <name>
-   clean worker log
-
- Options:
-
-   -h, --help     output usage information
-   -V, --version  output the version number
-```
-
 # After 101
 This is a Couchdb based software, so when you are interacting to this Http interface you are talking directly to Couchdb database.
 
@@ -60,6 +34,36 @@ Every task is stored in an couched database and have the following properties:
 Workers are the job executor, you can have a lot of workers, each one doing one type of task.
 
 Every worker have your own name and will execute the jobs specified in each tasks document on the scheduled time.
+
+To manage your workers you have to use the After command-line interface:
+
+Type after -h to see all options
+
+```
+Usage: After [options] [command]
+
+ Commands:
+
+   start [options] <name>
+   start a worker with the given name
+   
+   stop <name>
+   stop some worker
+   
+   log <name>
+   Show log from an worker
+   
+   list 
+   List all workers runing
+   
+   clean <name>
+   clean worker log
+
+ Options:
+
+   -h, --help     output usage information
+   -V, --version  output the version number
+```
 
 ## Jobs
 Jobs are special node.js modules executed by workers based on his tasks descriptions.
