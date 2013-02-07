@@ -2,29 +2,29 @@
 This is a tool to handle any kind of scheduled jobs, it works via restfull http interface.
 
 ```
-Usage: worker [options] [command]
+Usage: After [options] [command]
 
-  Commands:
+ Commands:
 
-    start [options] <name>
-    start and already added worker
-    
-    stop <name>
-    stop an already added worker
-    
-    log <name>
-    Show log from an worker
-    
-    list 
-    List all workers runing
-    
-    clean <name>
-    clean worker log
+   start [options] <name>
+   start a worker with the given name
+   
+   stop <name>
+   stop some worker
+   
+   log <name>
+   Show log from an worker
+   
+   list 
+   List all workers runing
+   
+   clean <name>
+   clean worker log
 
-  Options:
+ Options:
 
-    -h, --help     output usage information
-    -V, --version  output the version number
+   -h, --help     output usage information
+   -V, --version  output the version number
 ```
 
 # Requirements

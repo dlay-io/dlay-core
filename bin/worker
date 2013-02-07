@@ -8,6 +8,7 @@ var config = {};
 
 process.chdir(__dirname);
 
+program.name = 'After';
 program
   .version('0.0.1');
 
@@ -44,7 +45,7 @@ function daemon(name){
 
 program
   .command('start <name>')
-  .description('start and already added worker')
+  .description('start a worker with the given name')
   .option("-b, --background", "Run a worker in background (as a daemon)")
   .action(function(name, options){
 	if(options.background){
@@ -56,7 +57,7 @@ program
 
 program
   .command('stop <name>')
-  .description('stop an already added worker')
+  .description('stop some worker')
   .action(function(name){
 	workerMonitor.stop(name);
   });
