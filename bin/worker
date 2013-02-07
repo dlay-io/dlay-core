@@ -3,11 +3,44 @@ var program = require('commander');
 var paths = require('../paths');
 var workerMonitor = require('../lib/worker_monitor');
 var fs = require('fs');
+var spawn = require('child_process').spawn;
+var config = {};
 
 process.chdir(__dirname);
 
 program
   .version('0.0.1');
+
+
+function daemon(name){
+	// Configs
+	config.logName = name + '.log';
+	config.lockName = name + '.pid';
+	config.logPath = paths.logs + '/' + config.logName;
+	config.lockPath = paths.run + '/' + config.lockName;
+
+	// Log stream
+	var outFD = fs.openSync(config.logPath, 'a');
+	var errFD = fs.openSync(config.logPath, 'a');
+
+	// Executing
+	var daemon = spawn(__filename, ['start', name], {
+		stdio: ['ipc', outFD, errFD],
+		detached: true
+	});
+	
+	// Writing PID file
+	fs.writeFile(config.lockPath, daemon.pid, function(err, written, buffer){
+		if(err) {
+			console.log('An error do not let the process be started');
+			console.log(err);
+		} else {
+			console.log('The After worker ' + name + ' was sucessfully started');
+			process.exit();
+		}
+	});
+}
+
 
 program
   .command('start <name>')
@@ -15,7 +48,7 @@ program
   .option("-b, --background", "Run a worker in background (as a daemon)")
   .action(function(name, options){
 	if(options.background){
-		workerMonitor.daemon(name);
+		daemon(name);
 	} else {
 		workerMonitor.start(name);
 	}
