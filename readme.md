@@ -1,5 +1,5 @@
 # After - Schedule your tasks via http
-This is a tool to handle any kind of scheduled jobs, it works via restfull http interface.
+A multi-worker task schedulament tool backed by Couchdb and node.js.
 
 ```
 Usage: After [options] [command]
@@ -27,23 +27,43 @@ Usage: After [options] [command]
    -V, --version  output the version number
 ```
 
-# Requirements
-This software as created to fill some requirements:
-* Just one port exposed (couched 5985)
-* Extensible
-* Distribuided
-* Faul tolerant
-* Easy to monitore
+# After 101
+This is a Couchdb based software, so when you are interacting to this Http interface you are talking directly to Couchdb database.
 
-## Job
-Automated script service
-Ex: 
-* start_something 
-* stop_something
-* compact_couchdb
+## Tasks
+Tasks are a kind of job execution request designated to some worker.
 
-## Task
-Schedule document linked to an worker
+Every task in stored in an couched database and have the following properties:
+
+|Atribute     |Description                           |
+|-------------|--------------------------------------|
+|worker       | Name of task owner after worker      |
+|date         | Date and time to execute task (UTC)  |
+|job          | Name of job to executed in this task |
+|status       | Status of this task, if you want to  |
+|             | the worker process your task you have|
+|             |  to start it with status "waiting"   |
+
+
+worker
+date
+job
+status
+
+## Worker
+Workers are a job executor, you can have a lot of workers, each one doing one type of task.
+
+Every worker have your own name and will execute the jobs specified in each tasks document in the scheduled time.
+
+## Jobs
+Jobs are special node.js modules executed by workers based on his tasks descriptions.
+
+You can have how many jobs you want, all started workers are enabled to execute a job.
+
+
+### Creating a task
+
+
 Ex:
 
 ```javascript
@@ -67,6 +87,24 @@ Task Statuses
 * reschedule
 * cancel
 * canceled (worker only)
+
+
+# Requirements
+This software as created to fill some requirements:
+* Just one port exposed (couched 5985)
+* Extensible
+* Distribuided
+* Faul tolerant
+* Easy to monitore
+
+## Job
+Automated script service
+Ex: 
+* start_something 
+* stop_something
+* compact_couchdb
+
+
 
 ## Worker
 Worker is the Task executor, you can have how many worker you want in the same server. I'll probably want to use a different worker for each type of task.
