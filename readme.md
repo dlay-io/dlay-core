@@ -35,14 +35,12 @@ Tasks are a kind of job execution request designated to some worker.
 
 Every task in stored in an couched database and have the following properties:
 
-|Atribute     |Description                           |
-|-------------|--------------------------------------|
-|worker       | Name of task owner after worker      |
-|date         | Date and time to execute task (UTC)  |
-|job          | Name of job to executed in this task |
-|status       | Status of this task, if you want to  
-               the worker process your task you have
-               to start it with status "waiting"      |
+|Atribute     |Description                                    |
+|-------------|-----------------------------------------------|
+|worker       | Name of task owner after worker               |
+|date         | Date and time to execute task (UTC)           |
+|job          | Name of job to executed in this task          |
+|status       | Status of this task, if you want to the worker process your task you have to start it with status "waiting"  |
 
 
 
