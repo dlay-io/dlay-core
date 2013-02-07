@@ -33,7 +33,7 @@ This is a Couchdb based software, so when you are interacting to this Http inter
 ## Tasks
 Tasks are a kind of job execution request designated to some worker.
 
-Every task in stored in an couched database and have the following properties:
+Every task is stored in an couched database and have the following properties:
 
 |Atribute     |Description                                    |
 |-------------|-----------------------------------------------|
@@ -42,7 +42,7 @@ Every task in stored in an couched database and have the following properties:
 |job          | Name of job to executed in this task          |
 |status       | Status of this task, if you want to the worker process your task you have to start it with status "waiting"  |
 
-Full list of status:
+**Full list of status:**
 
 | Status    | Description                                      |
 |-----------|--------------------------------------------------|
@@ -55,9 +55,9 @@ Full list of status:
 | canceled  | Used by workers to mark an task as canceled      |
 
 ## Worker
-Workers are a job executor, you can have a lot of workers, each one doing one type of task.
+Workers are the job executor, you can have a lot of workers, each one doing one type of task.
 
-Every worker have your own name and will execute the jobs specified in each tasks document in the scheduled time.
+Every worker have your own name and will execute the jobs specified in each tasks document on the scheduled time.
 
 ## Jobs
 Jobs are special node.js modules executed by workers based on his tasks descriptions.
@@ -67,42 +67,42 @@ You can have how many jobs you want, all started workers are enabled to execute 
 
 ### Creating a task
 
-
-Ex:
+POST the json above to: 
+'http://localhost:5984/tasks'
 
 ```json
 {
-	worker:manobi,
-   date:2011-10-12,
-   job:{
-		name:"start_campaign",
-		arguments: [2,3,"teste"]
+	"worker":"manobi",
+	"date":"2011-10-12",
+	"job": {
+		"name":"start_replication",
+		"arguments": [2, 3, "test"]
 	},
- 	status:"waiting"
+ 	"status": "waiting"
 }
 ```
 
+* Copy the _id field returned in order to check the status later
 
-# Requirements
+### Starting a worker
+In terminal do:
+
+```after start manobi```
+
+Wait until the time informed in task and look the task document
+
+```GET localhost:5984/tasks/:_id
+
+### Creating more jobs
+SOON
+
+# Philosofy
 This software as created to fill some requirements:
 * Just one port exposed (couched 5985)
 * Extensible
 * Distribuided
 * Faul tolerant
 * Easy to monitore
-
-## Job
-Automated script service
-Ex: 
-* start_something 
-* stop_something
-* compact_couchdb
-
-
-
-## Worker
-Worker is the Task executor, you can have how many worker you want in the same server. I'll probably want to use a different worker for each type of task.
-
 
 # How it works
 In After there's no big secrets, all magic happens in scheduler class (that can be used as common.js module, to schedule tasks on your program in execution time). In the After core we start a timer with javascript setInterval and emit for every second (1000 mileseconds) all events atached to this time.
