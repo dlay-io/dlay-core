@@ -1,5 +1,7 @@
-# After - Schedule your tasks via http
-A multi-worker task schedulament tool backed by Couchdb and node.js.
+# After - Cron no more
+Schedule your tasks over http
+
+A multi-worker task scheduling tool backed by Couchdb and Node.js.
 
 ```
 Usage: After [options] [command]
