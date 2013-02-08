@@ -162,7 +162,7 @@ $ git clone git://github.com/adlayer/after.git
 $ cd after
 ```
 
-Create a user in Couchdb with name ***"after"*** and ***"after"** as password. Or change it config.json file.
+Create a user in Couchdb with name ***"after"*** and ***"after"*** as password. Or change it config.json file.
 
 Install it by run inside the After's folder
 
