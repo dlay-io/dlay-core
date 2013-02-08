@@ -9,7 +9,7 @@ This is a Couchdb based software, so when you are interacting to this Http inter
 ## Tasks
 Tasks are a kind of job execution request designated to some worker.
 
-Every task is stored in an couched database and have the following properties:
+Every task is stored in an couchdb database as a new document and have the following properties:
 
 |Atribute     |Description                                    |
 |-------------|-----------------------------------------------|
@@ -30,7 +30,18 @@ Every task is stored in an couched database and have the following properties:
 | cancel    | When marked as "cancel" worker will remove this task from his execution list                                   |
 | canceled  | Used by workers to mark an task as canceled      |
 
-## Worker
+## Jobs
+Jobs are simple node.js modules executed by workers based on his tasks descriptions.
+
+You can have how many jobs you want, all started workers are enabled to execute a job.
+
+One job is nothing else them an function exposed as node.js module which receives an task as argument.
+
+Look to some [jobs example](https://github.com/adlayer/after/tree/master/jobs)
+
+You also have to [add jobs to index.js](https://github.com/adlayer/after/blob/master/jobs/index.js) in the root of your jobs folder.
+
+## Workers
 Workers are the job executor, you can have a lot of workers, each one doing one type of task.
 
 Every worker have your own name and will execute the jobs specified in each tasks document on the scheduled time.
@@ -64,11 +75,6 @@ Usage: After [options] [command]
    -h, --help     output usage information
    -V, --version  output the version number
 ```
-
-## Jobs
-Jobs are special node.js modules executed by workers based on his tasks descriptions.
-
-You can have how many jobs you want, all started workers are enabled to execute a job.
 
 
 # Getting started
