@@ -171,10 +171,23 @@ If one worker start delayed or falls for any reason, after is smart and prioriti
 
 # Instalation
 
+Install [Couchdb](http://couchdb.apache.org)
+
+Install [Node.js](http://nodejs.org)
+
 Create a user in Couchdb with name "after" and "after" as password.
 
+Clone this repository and get inside the folder
+
 ```
-./configure
-make
-make install
+$ git clone git://github.com/adlayer/after.git
+$ cd after
+```
+
+Install it by run inside the after folder
+
+```
+$ ./configure
+$ make
+$ make install
 ```
