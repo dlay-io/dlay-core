@@ -150,7 +150,9 @@ module.export = function myFirstAfterJob(task){
 ```
 
 
-# Philosofy
+# How it works
+
+## Philosofy
 This software as created to fill some requirements:
 * Just one port exposed (couched 5985)
 * Extensible
@@ -158,7 +160,6 @@ This software as created to fill some requirements:
 * Faul tolerant
 * Easy to monitore
 
-# How it works
 In After there's no big secrets, all magic happens in scheduler class (that can be used as common.js module, to schedule tasks on your program in execution time). 
 
 We start a timer with javascript setInterval and emit an event for every second (1000 mileseconds).
