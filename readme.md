@@ -149,27 +149,6 @@ module.export = function myFirstAfterJob(task){
 };
 ```
 
-
-# How it works
-
-## Philosofy
-This software as created to fill some requirements:
-* Just one port exposed (couched 5985)
-* Extensible
-* Distributed
-* Faul tolerant
-* Easy to monitore
-
-In After there's no big secrets, all magic happens in scheduler class (that can be used as common.js module, to schedule tasks on your program in execution time). 
-
-We start a timer with javascript setInterval and emit an event for every second (1000 mileseconds).
-
-When all jobs & tasks event are dispatched the worker is the responsible for update couchdb document about the progress.
-
-So when an job is executed the scheduler clear all related data from memory but persist it into couchdb.
-
-If one worker start delayed or falls for any reason, after is smart and prioritize the execution of this delayed jobs.
-
 # Instalation
 
 Install [Couchdb](http://couchdb.apache.org)
@@ -192,3 +171,23 @@ $ ./configure
 $ make
 $ make install
 ```
+
+# How it works
+
+## Philosofy
+This software as created to fill some requirements:
+* Just one port exposed (couched 5985)
+* Extensible
+* Distributed
+* Faul tolerant
+* Easy to monitore
+
+In After there's no big secrets, all magic happens in scheduler class (that can be used as common.js module, to schedule tasks on your program in execution time). 
+
+We start a timer with javascript setInterval and emit an event for every second (1000 mileseconds).
+
+When all jobs & tasks event are dispatched the worker is the responsible for update couchdb document about the progress.
+
+So when an job is executed the scheduler clear all related data from memory but persist it into couchdb.
+
+If one worker start delayed or falls for any reason, after is smart and prioritize the execution of this delayed jobs.
