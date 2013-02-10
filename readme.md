@@ -17,6 +17,7 @@ Every task is stored in an couchdb database as a new document and have the follo
 |date         | Date and time to execute task (UTC)           |
 |job          | Name of job to executed in this task          |
 |status       | Status of this task, if you want to the worker process your task you have to start it with status "waiting"  |
+| repeat      | Include this when you want run a task more then once                                                          |
 
 **Full list of status:**
 
