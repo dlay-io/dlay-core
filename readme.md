@@ -119,7 +119,7 @@ $ after start [worker name] -b
 
 Post the json bellow to the following url:
 
-```
+```http
 POST http://localhost:5984/tasks/:id HTTP/1.1
 ```
 
