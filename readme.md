@@ -1,13 +1,18 @@
 # After - Cron no more
 Schedule your tasks over http
 
-After was projected to handle any type of time based task. This is multi-worker task scheduling tool backed by Couchdb and Node.js.
+After was designed to handle any type of time based task. This is a multi-worker task scheduling tool, backed by Couchdb and Node.js.
 
-# After 101
-This is a Couchdb based software, so when you are interacting to this Http interface you are talking directly to Couchdb database.
+# Architecture
+After's architecture is extremely familiar because it have basically two parts.
+
+The server where tasks are stored is a Couchdb database, so it can be managed via its http API.
+
+We also have the workers as the clients, workers are always listen to changes in tasks document and eventually use this changes, to execute the jobs described in task json document.
+
 
 ## Tasks
-Tasks are a kind of job execution request designated to some worker.
+Tasks are a type of job execution request designated to some worker.
 
 Every task is stored in an couchdb database as a new document and have the following properties:
 
@@ -17,7 +22,7 @@ Every task is stored in an couchdb database as a new document and have the follo
 |date         | Date and time to execute task (UTC)           |
 |job          | Name of job to executed in this task          |
 |status       | Status of this task, if you want to the worker process your task you have to start it with status "waiting"  |
-| repeat      | Include this when you want run a task more then once                                                          |
+| repeat      | Include this when you want run a task more than once                                                          |
 
 **Full list of status:**
 
@@ -26,17 +31,17 @@ Every task is stored in an couchdb database as a new document and have the follo
 | waiting   | Task is waiting to be scheduled or to be executed|
 | scheduled | Workers will mark tasks as scheduled when they put it in memory to execute in the in the task date attribute      |
 | done      | This status means that this task have been already executed                                                       |
-| err       | Something doesn't work in the execution of job specified in the task                                          |
+| error     | Something doesn't work in the execution of job specified in the task                                          |
 | reschedule| Use it to delay or to forward a task that is already scheduled                                              |
 | cancel    | When marked as "cancel" worker will remove this task from his execution list                                   |
 | canceled  | Used by workers to mark an task as canceled      |
 
 ## Repeatable tasks
-In order to be a complete cron replacement After tasks also implements the possibility to repeat tasks with the frequency so  flexible as you may need.
+In order to be a complete cron replacement After's tasks also implements the possibility to repeat tasks with the frequency so  flexible as you may need.
 
-If you want to run the same task you can add the param "repeat" in your task document.
+If you want to run the same task more than once you can add the param "repeat" in your task document.
 
-After uses the moment.js library to parse this moment so it's compatible with this 'add' method.
+After uses the moment.js library to parse this attribute so it's compatible with this 'add' method.
 
 ```json
 {
@@ -45,7 +50,7 @@ After uses the moment.js library to parse this moment so it's compatible with th
 	"status": "waiting",
 	"repeat": {
 		"days": 7,
-		"months":1
+		"months": 1
 	},
 	"job": {
 		"name": "generate_billing",
@@ -54,7 +59,7 @@ After uses the moment.js library to parse this moment so it's compatible with th
 }
 ```
 
-This task document says to the worker repeat a task every one month and seven days.
+The task document above says to the worker repeat this task every one month and seven days.
 
 
 ## Jobs
@@ -62,7 +67,7 @@ Jobs are simple node.js modules executed by workers based on his tasks descripti
 
 You can have how many jobs you want, all started workers are enabled to execute any job present in your jobs folder.
 
-One job is nothing else them a function exposed as node.js module which receives one task as argument.
+One job is nothing else than a function exposed as node.js module which receives one task as argument.
 
 Look to some [jobs example](https://github.com/adlayer/after/tree/master/jobs)
 
@@ -73,7 +78,7 @@ Workers are the job executor, you can have a lot of workers, each one doing one 
 
 Every worker have your own name and will execute the jobs specified in each task document on the scheduled time.
 
-To manage your workers you have to use the After command-line interface:
+To manage your workers you have to use the After's command-line interface:
 
 Type after -h to see all options
 
@@ -103,6 +108,10 @@ Usage: After [options] [command]
    -V, --version  output the version number
 ```
 
+To run one worker in background use:
+```
+$ after start [worker name] -b
+```
 
 # Getting started
 
@@ -117,7 +126,7 @@ POST http://localhost:5984/tasks/:id HTTP/1.1
 ```json
 {
 	"worker":"manobi",
-	"date":"2011-10-12",
+	"date":"2013-01-12",
 	"job": {
 		"name":"start_replication",
 		"arguments": [2, 3, "test"]
@@ -141,10 +150,10 @@ Wait until the time informed in task and look the task document:
 GET http://localhost:5984/tasks/:id HTTP/1.1
 ```
 
-It should have the done status now.
+It should change the task status do "done" in few seconds, since it is a delayed task.
 
 ## Creating more jobs
-After jobs are stored in a particular folder of your system, by default in user/local/etc/after
+After's jobs are stored in a particular folder of your system, by default in ```user/local/etc/after```.
 
 If you have some experience working with node.js create new jobs will be extremely easy for you.
 
@@ -156,7 +165,7 @@ module.export = function myFirstAfterJob(task){
 };
 ```
 
-As you can see in the example above your job function have to implement just one argument, called "task", so each time a worker have to execute some job it will send to your function document task for that job execution as an javascript object.
+As you can see in the example above your job function have to implement just one argument, called "task", so each time that one worker have to execute some job it will send to your function document task for that job execution as an javascript object.
 
 ```javascript
 module.export = function myFirstAfterJob(task){
@@ -164,7 +173,7 @@ module.export = function myFirstAfterJob(task){
 };
 ```
 
-Will return something like:
+The console.log output will return something like:
 
 ```javascript
 {
@@ -173,19 +182,21 @@ Will return something like:
 }
 ```
 
-The task object is also an Event emitter, so you should use this object to notify After database, about the success or of the task execution.
+The task object is also an Event Emitter, so you should use this object to notify After's database, about the success or not of the task execution.
 
 ```javascript
 module.export = function myFirstAfterJob(task){
 	if( doSomething()){
+   // Notify that everything worked
 		task.emit('done');
 	} else {
+		// Notify that something do not work fine
 		task.emit('error');
 	};
 };
 ```
 
-# Instalation
+# Installation
 
 Install [Couchdb](http://couchdb.apache.org)
 
@@ -200,7 +211,7 @@ $ cd after
 
 Create a user in Couchdb with name ***"after"*** and ***"after"*** as password. Or change it config.json file.
 
-Install it by run inside the After's folder
+Install it by run inside the After's folder:
 
 ```
 $ ./configure
@@ -213,17 +224,19 @@ $ make install
 ## Philosophy
 This software as created to fill some requirements:
 * Just one port exposed (couched 5985)
-* Extensible
-* Distributed
-* Faul tolerant
-* Easy to monitore
+* Be Extensible
+* Be Distributed
+* Be Faul tolerant
+* Be Easy to monitore
 
-In After there's no big secrets, all magic happens in scheduler class (that can be used as common.js module, to schedule tasks on your program in execution time). 
+In After there's no big secrets, all magic happens in scheduler class (that can be used as common.js module, to schedule tasks on your program in the execution time). 
 
-We start a timer with javascript setInterval and emit an event for every second (1000 mileseconds).
+We start a timer with javascript setInterval and emiting an event for every second (1000 mileseconds). Every task are registered as an event listener for a timestamp of original ISO UTC date.
 
-When all jobs & tasks event listener for one date were dispatched, the worker is the responsible for update couchdb document about the progress of task execution.
+When there are any event listener for some timestamp/date/second  it will execute the job with all params of the task.
 
-So when an job is executed the scheduler clear all related data from memory but persist it into Couchdb.
+And after fish the execution of the job, the worker will report the database about the success or not of the task execution.
 
-If one worker start delayed or falls, after is smart and prioritize the execution of this delayed jobs.
+All jobs listening for one timestamp will be executed asyncrouslly, probably in parallel.
+
+If one worker start and have delayed tasks, he will execute the delayed tasks immediately, since these tasks were supposed to be executed in the time that the worker was sleeping for some reasons.
