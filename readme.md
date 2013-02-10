@@ -1,7 +1,7 @@
 # After - Cron no more
 Schedule your tasks over http
 
-A multi-worker task scheduling tool backed by Couchdb and Node.js.
+After was projected to handle any type of time based task. This is multi-worker task scheduling tool backed by Couchdb and Node.js.
 
 # After 101
 This is a Couchdb based software, so when you are interacting to this Http interface you are talking directly to Couchdb database.
@@ -30,12 +30,38 @@ Every task is stored in an couchdb database as a new document and have the follo
 | cancel    | When marked as "cancel" worker will remove this task from his execution list                                   |
 | canceled  | Used by workers to mark an task as canceled      |
 
+## Repeatable tasks
+In order to be a complete cron replacement After tasks also implements the possibility to repeat tasks with the frequency so  flexible as you may need.
+
+If you want to run the same task you can add the param "repeat" in your task document.
+
+After uses the moment.js library to parse this moment so it's compatible with this 'add' method.
+
+```json
+{
+	"date": "2012-12-12",
+	"worker": "manobi",
+	"status": "waiting",
+	"repeat": {
+		"days": 7,
+		"months":1
+	},
+	"job": {
+		"name": "generate_billing",
+		"arguments": [2,3,4,5]
+	}
+}
+```
+
+This task document says to the worker repeat a task every one month and seven days.
+
+
 ## Jobs
 Jobs are simple node.js modules executed by workers based on his tasks descriptions.
 
-You can have how many jobs you want, all started workers are enabled to execute a job.
+You can have how many jobs you want, all started workers are enabled to execute any job present in your jobs folder.
 
-One job is nothing else them an function exposed as node.js module which receives an task as argument.
+One job is nothing else them a function exposed as node.js module which receives one task as argument.
 
 Look to some [jobs example](https://github.com/adlayer/after/tree/master/jobs)
 
@@ -44,7 +70,7 @@ You also have to [add jobs to index.js](https://github.com/adlayer/after/blob/ma
 ## Workers
 Workers are the job executor, you can have a lot of workers, each one doing one type of task.
 
-Every worker have your own name and will execute the jobs specified in each tasks document on the scheduled time.
+Every worker have your own name and will execute the jobs specified in each task document on the scheduled time.
 
 To manage your workers you have to use the After command-line interface:
 
@@ -81,8 +107,11 @@ Usage: After [options] [command]
 
 ## Creating a task
 
-POST the json below to: 
-'http://localhost:5984/tasks'
+Post the json bellow to the following url:
+
+```
+POST http://localhost:5984/tasks/:id HTTP/1.1
+```
 
 ```json
 {
@@ -105,10 +134,10 @@ In terminal do:
  $ after start manobi
 ```
 
-Wait until the time informed in task and look the task document
+Wait until the time informed in task and look the task document:
 
 ```http
-GET localhost:5984/tasks/:_id
+GET http://localhost:5984/tasks/:id HTTP/1.1
 ```
 
 It should have the done status now.
@@ -180,7 +209,7 @@ $ make install
 
 # How it works
 
-## Philosofy
+## Philosophy
 This software as created to fill some requirements:
 * Just one port exposed (couched 5985)
 * Extensible
@@ -192,8 +221,8 @@ In After there's no big secrets, all magic happens in scheduler class (that can 
 
 We start a timer with javascript setInterval and emit an event for every second (1000 mileseconds).
 
-When all jobs & tasks event are dispatched the worker is the responsible for update couchdb document about the progress.
+When all jobs & tasks event listener for one date were dispatched, the worker is the responsible for update couchdb document about the progress of task execution.
 
-So when an job is executed the scheduler clear all related data from memory but persist it into couchdb.
+So when an job is executed the scheduler clear all related data from memory but persist it into Couchdb.
 
-If one worker start delayed or falls for any reason, after is smart and prioritize the execution of this delayed jobs.
+If one worker start delayed or falls, after is smart and prioritize the execution of this delayed jobs.
