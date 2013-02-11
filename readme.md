@@ -24,19 +24,7 @@ Every task is stored in an couchdb database as a new document and have the follo
 |status       | Status of this task, if you want to the worker process your task you have to start it with status "waiting"  |
 | repeat      | Include this when you want run a task more than once                                                          |
 
-**Full list of status:**
-
-| Status    | Description                                      |
-|-----------|--------------------------------------------------|
-| waiting   | Task is waiting to be scheduled or to be executed|
-| scheduled | Workers will mark tasks as scheduled when they put it in memory to execute in the in the task date attribute      |
-| done      | This status means that this task have been already executed                                                       |
-| error     | Something doesn't work in the execution of job specified in the task                                          |
-| reschedule| Use it to delay or to forward a task that is already scheduled                                              |
-| cancel    | When marked as "cancel" worker will remove this task from his execution list                                   |
-| canceled  | Used by workers to mark an task as canceled      |
-
-## Repeatable tasks
+### Repeatable tasks
 In order to be a complete cron replacement After's tasks also implements the possibility to repeat tasks with the frequency so  flexible as you may need.
 
 If you want to run the same task more than once you can add the param "repeat" in your task document.
@@ -60,6 +48,18 @@ After uses the moment.js library to parse this attribute so it's compatible with
 ```
 
 The task document above says to the worker repeat this task every one month and seven days.
+
+### Full list of status:
+
+| Status    | Description                                      |
+|-----------|--------------------------------------------------|
+| waiting   | Task is waiting to be scheduled or to be executed|
+| scheduled | Workers will mark tasks as scheduled when they put it in memory to execute in the in the task date attribute      |
+| done      | This status means that this task have been already executed                                                       |
+| error     | Something doesn't work in the execution of job specified in the task                                          |
+| reschedule| Use it to delay or to forward a task that is already scheduled                                              |
+| cancel    | When marked as "cancel" worker will remove this task from his execution list                                   |
+| canceled  | Used by workers to mark an task as canceled      |
 
 
 ## Jobs
