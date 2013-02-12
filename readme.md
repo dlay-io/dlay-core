@@ -178,7 +178,7 @@ The console.log output will return something like:
 ```javascript
 {
 	worker: "manobi",
-	date: "2012-02-2013", //verify this line
+	date: "2013-02-01"
 }
 ```
 
