@@ -16,7 +16,7 @@ Tasks are a type of job execution request designated to some worker.
 
 Every task is stored in an couchdb database as a new document and have the following properties:
 
-|Atribute     |Description                                    |
+|Attribute    |Description                                    |
 |-------------|-----------------------------------------------|
 |worker       | Name of task owner after worker               |
 |date         | Date and time to execute task (UTC)           |
@@ -97,7 +97,7 @@ Usage: After [options] [command]
    Show log from an worker
    
    list 
-   List all workers runing
+   List all workers running
    
    clean <name>
    clean worker log
@@ -187,7 +187,7 @@ The task object is also an Event Emitter, so you should use this object to notif
 ```javascript
 module.export = function myFirstAfterJob(task){
 	if( doSomething()){
-   // Notify that everything worked
+		// Notify that everything worked
 		task.emit('done');
 	} else {
 		// Notify that something do not work fine
