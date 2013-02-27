@@ -16,13 +16,13 @@ Tasks are a type of job execution request designated to some worker.
 
 Every task is stored in an couchdb database as a new document and have the following properties:
 
-|Atribute     |Description                                    |
+|Attribute    |Description                                    |
 |-------------|-----------------------------------------------|
 |worker       | Name of task owner after worker               |
 |date         | Date and time to execute task (UTC)           |
 |job          | Name of job to executed in this task          |
 |status       | Status of this task, if you want to the worker process your task you have to start it with status "waiting"  |
-| repeat      | Include this when you want run a task more than once                                                          |
+|repeat       | Include this when you want run a task more than once                                                          |
 
 ### Repeatable tasks
 In order to be a complete cron replacement After's tasks also implements the possibility to repeat tasks with the frequency so  flexible as you may need.
@@ -70,7 +70,7 @@ The task document above says to the worker repeat this task every one month and 
 | Status    | Description                                      |
 |-----------|--------------------------------------------------|
 | waiting   | Task is waiting to be scheduled or to be executed|
-| scheduled | Workers will mark tasks as scheduled when they put it in memory to execute in the in the task date attribute      |
+| scheduled | Workers will mark tasks as scheduled when they put it in memory to execute in the task date attribute      |
 | done      | This status means that this task have been already executed                                                       |
 | error     | Something doesn't work in the execution of job specified in the task                                          |
 | reschedule| Use it to delay or to forward a task that is already scheduled                                              |
@@ -113,7 +113,7 @@ Usage: After [options] [command]
    Show log from an worker
    
    list 
-   List all workers runing
+   List all workers running
    
    clean <name>
    clean worker log
@@ -194,7 +194,7 @@ The console.log output will return something like:
 ```javascript
 {
 	worker: "manobi",
-	date: "2012-02-2013",
+	date: "2013-02-01"
 }
 ```
 
@@ -203,7 +203,7 @@ The task object is also an Event Emitter, so you should use this object to notif
 ```javascript
 module.export = function myFirstAfterJob(task){
 	if( doSomething()){
-   // Notify that everything worked
+		// Notify that everything worked
 		task.emit('done');
 	} else {
 		// Notify that something do not work fine
@@ -253,6 +253,6 @@ When there are any event listener for some timestamp/date/second  it will execut
 
 And after fish the execution of the job, the worker will report the database about the success or not of the task execution.
 
-All jobs listening for one timestamp will be executed asyncrouslly, probably in parallel.
+All jobs listening for one timestamp will be executed asynchronously, probably in parallel.
 
 If one worker start and have delayed tasks, he will execute the delayed tasks immediately, since these tasks were supposed to be executed in the time that the worker was sleeping for some reasons.
