@@ -27,13 +27,28 @@ Every task is stored in an couchdb database as a new document and have the follo
 ### Repeatable tasks
 In order to be a complete cron replacement After's tasks also implements the possibility to repeat tasks with the frequency so  flexible as you may need.
 
-If you want to run the same task more than once you can add the param "repeat" in your task document.
+If you want to run the same task more than once, you can add the param "repeat" in your task document.
 
-After uses the moment.js library to parse this attribute so it's compatible with this 'add' method.
+After uses [moment.js library](http://momentjs.com/) to parse date params.
+
+See what options you can use:
+
+|Key	        |Shorthand |
+|-------------|----------|
+|years        | y        |
+|months       | M        |
+|weeks        | w        |
+|days	        | d        |
+|hours        | h        |
+|minutes      | m        |
+|seconds      | s        |
+|milliseconds | ms       |
+
+**Real example***
 
 ```json
 {
-	"date": "2012-12-12",
+	"date": "2012-02-27",
 	"worker": "manobi",
 	"status": "waiting",
 	"repeat": {
@@ -42,12 +57,13 @@ After uses the moment.js library to parse this attribute so it's compatible with
 	},
 	"job": {
 		"name": "generate_billing",
-		"arguments": [2,3,4,5]
+		"arguments": ['1234','any_other_params']
 	}
 }
 ```
 
 The task document above says to the worker repeat this task every one month and seven days.
+
 
 ### Full list of status:
 
