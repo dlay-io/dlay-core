@@ -7,8 +7,8 @@ run=${var}/run
 default:
 	# Install local modules
 	npm install
-install-model:
-	# Install basic model in couchdb
+install-app:
+	# Install basic app in couchdb
 	./tasks/install/db/push
 	
 install:
@@ -22,13 +22,13 @@ install:
 	mkdir ${var}/${name}
 	# worker process pids
 	mkdir ${run}/${name}
-	make install-model
+	make install-app
 
 update:
 	# install lib and cli global
 	npm install
 	sudo npm install -g
-	make install-model
+	make install-app
 
 uninstall:
 	# Unistall modules to run jake tasks
