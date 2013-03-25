@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 var paths = require('../../../paths');
 var config = require(paths.config);
-var models = require('../../../models/app.js');
+var models = require('../../../app/app.js');
 var couchapp = require('couchapp');
 
 var protocol = 'http://';
