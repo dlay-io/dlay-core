@@ -1,0 +1,14 @@
+{
+  "name": "app",
+  "version": "0.0.0",
+  "dependencies": {
+    "modernizr": "~2.6.2",
+    "jquery": "~1.9.1",
+	"underscore": "1.4.4",
+	"backbone": "1.0.0",
+	"hogan": "x.x.x",
+	"requirejs": "x.x.x",
+	"ace": "x.x.x"
+  },
+  "devDependencies": {}
+}

@@ -1,28 +1,7 @@
 {
-  "name": "after",
-  "version": "0.0.1",
-  "description": "Software to schedule your tasks",
-  "author": "Gabriel de Oliveira Barbosa <manobi.oliveira@gmail.com>",
-  "bin": {
-    "after": "./bin/worker"
-  },
-  "private": true,
-  "dependencies": {
-    "commander": "0.x.x",
-    "couchapp": "0.9.1",
-    "cradle": "0.6.4",
-    "vargs": "0.1.0",
-    "moment": "1.3.0",
-    "async": "0.1.18"
-  },
-  "devDependencies": {
-    "sinon": "1.3.x"
-  },
-  "subdomain": "after",
-  "scripts": {
-    "start": "./bin/worker"
-  },
-  "engines": {
-    "node": "0.8.x"
-  }
+  "author": "",
+  "name": "",
+  "version": "0.0.0",
+  "dependencies": {},
+  "devDependencies": {}
 }
