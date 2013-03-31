@@ -17,11 +17,12 @@
     </head>
     <body>
         <div class="container">
-            <div class="hero-unit">
+			<div id="changes">
+				Here goes the livestream
+			</div>
+            <div class="tasks">
                 <h1><a href="/tasks/_design/app/index.html">Tasks</a></h1>
-
-                <ul id="tasks">
-                </ul>
+                <ul id="tasks"></ul>
 				<div id="context"></div>
             </div>
         </div>
@@ -31,15 +32,22 @@
         <![endif]-->
 
 		<script id="task-item-tpl" type="text/template">
-			<li><a href="show/{{_id}}" class="{{status}} show">{{_id}}</a></li>
+			<li id="{{_id}}"><a href="show/{{_id}}" class="{{status}} show">{{_id}}</a></li>
 		</script>
 		
 		<script id="task-show-tpl" type="text/template">
 			<form action="edit/{{_id}}">
+				<ul id="toolbar">
+					<li>Previous version</li><li>Cancel</li><li>Remove</li>
+				</ul>
+				<label for="_id">Id</label>
 				<input name="_id" type="text" value="{{_id}}" />
 				<input name="_rev" type="hidden" value="{{_rev}}" />
+				<label for="worker">Worker</label>
 				<input name="worker" type="text" value="{{worker}}" />
+				<label for="date">Date</label>
 				<input name="date" type="text" value="{{date}}" />
+				<label for="status">Status</label>
 				<select name="status">
 					{{#status}}
 						<option value="{{value}}" {{#selected}}selected="selected"{{/selected}}>{{value}}</option>
@@ -48,12 +56,32 @@
 				<fieldset id="job">
 					<legend>Job</legend>
 					{{#job}}
-						<input type="text" value="{{name}}" />
-						<div id="arguments">
-							 {{arguments}}
-						</div>
+						<label for="jobName">Name</label>
+						<input name="jobName" type="text" value="{{name}}" />
+						<label for="JobArguments">Arguments</label>
+						<textarea name="jobArguments" id="arguments" rows="5" cols="100">{{{arguments}}}</textarea>
 					{{/job}}
 				</fieldset>
+				
+				<fieldset id="repeat">
+					<legend>Repeat</legend>
+					{{#repeat}}	
+						<fieldset>
+							<legend>
+							{{#first}}Every{{/first}}
+							{{^first}}And{{/first}}
+							</legend>
+							<input type="number" value="{{value}}" />
+							<select>
+								{{#options}}
+								<option {{#selected}}selected="selected"{{/selected}}>{{value}}</option>
+								{{/options}}
+							</select>
+						</fieldset>
+						<button>and +</button>
+					{{/repeat}}
+				</fieldset>
+				
 				<input type="submit" value="save" />
 			</form>
 		</script>
