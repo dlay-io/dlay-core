@@ -65,25 +65,29 @@
 				
 				<fieldset id="repeat">
 					<legend>Repeat</legend>
-					{{#repeat}}	
-						<fieldset>
-							<legend>
-							{{#first}}Every{{/first}}
-							{{^first}}And{{/first}}
-							</legend>
-							<input type="number" value="{{value}}" />
-							<select>
-								{{#options}}
-								<option {{#selected}}selected="selected"{{/selected}}>{{value}}</option>
-								{{/options}}
-							</select>
-						</fieldset>
-						<button>and +</button>
-					{{/repeat}}
+					{{> repeat}}
+					<input type="button" value="and +" id="add-repeat" />
 				</fieldset>
 				
 				<input type="submit" value="save" />
 			</form>
+		</script>
+		
+		<script id="task-repeat-fieldset" type="text/mustache">
+			{{#repeat}}	
+				<fieldset>
+					<legend>
+					{{#first}}Every{{/first}}
+					{{^first}}And{{/first}}
+					</legend>
+					<input type="number" value="{{value}}" />
+					<select name="repeat-{{name}}">
+						{{#options}}
+						<option {{#selected}}selected="selected"{{/selected}}>{{value}}</option>
+						{{/options}}
+					</select>
+				</fieldset>
+			{{/repeat}}
 		</script>
 		
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

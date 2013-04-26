@@ -8,13 +8,17 @@ default:
 	# Install local modules
 	npm install
 install-app:
+	cd app
+	npm install
+	cd ..
+	grunt couchapp
 	# Install basic app in couchdb
 	./tasks/install/db/push
 	
 install:
 	# install lib and cli global
 	sudo npm install -g
-	# create database in couchdb using config.json data
+	#create database in couchdb using config.json data
 	./tasks/install/db/create
 	# create jobs folder
 	cp -R jobs ${etc}/${name}
@@ -26,7 +30,7 @@ install:
 
 update:
 	# install lib and cli global
-	npm install
+	make default
 	sudo npm install -g
 	make install-app
 

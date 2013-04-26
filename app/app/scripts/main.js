@@ -29,6 +29,11 @@ function parseQueryString (queryString){
 
 
 
+var	templates = {
+	show: Hogan.compile($('#task-show-tpl').html()),
+	item: Hogan.compile($('#task-item-tpl').html()),
+	repeat: Hogan.compile($('#task-repeat-fieldset').html())
+}
 
 
 
@@ -51,6 +56,8 @@ var Task = Backbone.Model.extend({
 	
 });
 
+
+
 /**
 * Collection of all tasks
 *
@@ -67,8 +74,16 @@ var Tasks = Backbone.Collection.extend({
 	}
 });
 
+
+
+/**
+* View for task item list
+*
+* @class TaskItemView
+* @constructor
+*/
 var TaskItemView = Backbone.View.extend({
-	template: Hogan.compile($('#task-item-tpl').html()),
+	template: templates.item,
 	initialize: function(){
 //		this.listenTo(this.model, 'change', this.render)
 		this.render();
@@ -76,7 +91,7 @@ var TaskItemView = Backbone.View.extend({
 	render: function(){
 		// Task list element
 		var $tasks = $('#tasks');
-		var rendered = this.template.render(this.model.attributes || undefined);
+		var rendered = this.template.render(this.model.attributes || undefined, templates);
 		var $item = $('#' + this.model.get('_id'));
 		// Already exists
 		if ($item.length > 0){
@@ -88,75 +103,140 @@ var TaskItemView = Backbone.View.extend({
 	}
 });
 
+/**
+* Represents each option of Repeat Selectbox field
+* 
+* @class RepeatViewOption
+* @constructor
+*/
+var RepeatViewOption = Backbone.View.extend({
+	value: null,
+	selected: false
+});
 
-var TaskShowView = Backbone.View.extend({
-	template: Hogan.compile($('#task-show-tpl').html()),
+/**
+* Represents each option Task Status
+* 
+* @class StatusViewOption
+* @constructor
+*/
+var StatusViewOption = Backbone.View.extend({
+	value: null,
+	selected: false
+});
+
+
+/**
+* A collection of Repeat fieldsets with selectboxes and input values
+* 
+* @class RepeatViewCollection
+* @constructor
+*/
+var RepeatViewCollection = Backbone.View.extend({
+	template: templates.repeat,
+	/**
+	* @property
+	* @type Object
+	*/
+	options: null,
+	/**
+	* @property
+	* @type Array
+	*/
+	optList: ['months', 'weeks', 'days', 'minutes', 'seconds'],
+	/**
+	* Gonna be changed to false after the first iteration in options
+	* @property
+	* @type Bollean
+	*/
+	first: true,
+	/**
+	* Storage for every output generated from initialize method
+	* @property
+	* @type Array
+	*/
+	collection: null,
+	/**
+	* Creates the data for fieldsets ans respective selectboxes
+	* @method
+	*/
+	createOptions: function(selected){
+		var self = this;
+		return self.optList.map(function(opt){
+			return new RepeatViewOption({
+				value: opt,
+				selected: (opt === selected)
+			}).options;
+		});
+	},
 	initialize: function(){
-//		this.listenTo(this.model, 'change', this.render)
-		this.render();
+		var self = this;
+
+		var collection = _.keys(this.options.options).map(function(entry){
+	
+			var selectContent = self.createOptions(entry);
+			
+			// Remove from optList options already 
+			var index = self.optList.indexOf(entry);
+			self.optList.splice(index, 1);
+			
+			var output = {
+				name: entry,
+				value: self.options.options[entry],
+				frequency: entry,
+				options: selectContent
+			}
+			
+			if(self.first){
+				output.first = true;
+				self.first = false;
+			}
+			return output;
+			
+		});
+		
+		this.collection = collection;
+	}
+});
+
+
+/**
+* Represents the TaskView
+* 
+* @class TaskShowView
+* @constructor
+*/
+var TaskShowView = Backbone.View.extend({
+	template: templates.show,
+	statusList: ['done', 'waiting','cancel'],
+	createStatusOptions: function(){
+		var self = this;
+		return this.statusList.map(function(status){
+			return new StatusViewOption({
+				value: status,
+				selected: (self.model.get('status') === status)
+			}).options;
+		});
 	},
 	render: function(){
+		var self = this;
 		// Task list element
 		var $context = $('#context');
 		
 		var model = this.model;
-		
-		// Status list
-		var statuses = ['done', 'waiting','cancel'];
-		
-		// Building options
-		// https://github.com/janl/mustache.js/issues/82
-		statuses = statuses.map(function(status){
-			var option = {};
-			option.value = status;
-			
-			if(model.get('status') === status) {
-				option.selected = true;
-			}
-			
-			return option;
-		});
-		
-		
-		var repeats = ['months', 'weeks', 'days', 'minutes', 'seconds'];
-		var repeat = model.get('repeat');
-		var first = true;
-		
-		repeat = _.keys(model.get('repeat')).map(function(entry){
-			
-			var options = repeats.map(function(opt){
-				var obj = {};
-				obj.value = opt;
-				
-				if(opt === entry){
-					obj.selected = true;
-				}
-				
-				return obj;
-			});
-			
-			var output = {
-				value: repeat[entry],
-				frequency: entry,
-				options: options
-			}
-			
-			if(first){
-				output.first = true;
-				first = false;
-			}
-			return output;
-
-		});
-		
-		
-
-		// Copy model attributes and set status options
+		// Copy model attributes to user in render
 		var data = _.extend({}, this.model.attributes);
+				
+		var repeat = model.get('repeat');
+		if(repeat){
+			this.repeatView = new RepeatViewCollection({
+				options: repeat
+			});
+			data.repeat = this.repeatView.collection;
+		}
 
-		data.status = statuses;
-		data.repeat = repeat;
-		
+		data.status = this.createStatusOptions();
+
 		// Convert arguments to json
 		/*
 		* @todo:
@@ -166,9 +246,19 @@ var TaskShowView = Backbone.View.extend({
 			data.job.arguments = JSON.stringify(data.job.arguments);
 		}
 		// 
-		var rendered = this.template.render(data || undefined);
+		var rendered = this.template.render(data || undefined, templates);
 		$context.html(rendered);
 
+	},
+	initialize: function(){
+		var self = this;
+		this.render();
+		
+		$('#repeat #add-repeat').bind('click', function(){
+			var copy = _.extend({seconds:0}, self.model.get('repeat'));
+			self.model.set('repeat', copy);
+			self.render();
+		});
 	}
 });
 
@@ -182,87 +272,82 @@ var TaskShowView = Backbone.View.extend({
 */
 var Router = Backbone.Router.extend({
 
-  routes: {
-	"init":   "init",
-	"show/:id": "show",
-	"edit/:id": "edit",
-    "search/:query":        "search",  // #search/kiwis
-    "search/:query/p:page": "search"   // #search/kiwis/p7
-  },
+	routes: {
+		"init":   "init",
+		"show/:id": "show",
+		"edit/:id": "edit",
+		"search/:query":        "search",  // #search/kiwis
+		"search/:query/p:page": "search"   // #search/kiwis/p7
+	},
 
-  collection: new Tasks(),
-  init: function() {
+	collection: new Tasks(),
+	init: function() {
 	
-	$(function(){
-		$('body').delegate('a', 'click', function(e){
-			e.preventDefault();
-			app.navigate($(this).attr('href'), {trigger:true});
-		});
-		$('body').delegate('form', 'submit', function(e){
-			e.preventDefault();
-			app.navigate($(this).attr('action') + '?' + $(this).serialize(), {trigger:true});
-		});
-	});
-	
-	
-	// Collection of all tasks
-	var tasks = this.collection;
-	tasks.fetch().done(function(){
-		tasks.each(function(task){
-			var view = new TaskItemView({
-				model: task,
-				collection: tasks
+		$(function(){
+			$('body').delegate('a', 'click', function(e){
+				e.preventDefault();
+				app.navigate($(this).attr('href'), {trigger:true});
 			});
-
+			$('body').delegate('form', 'submit', function(e){
+				e.preventDefault();
+				app.navigate($(this).attr('action') + '?' + $(this).serialize(), {trigger:true});
+			});
 		});
-	});
-  },
-
-  show: function(id){
-	var collection = this.collection;
-	var task;
 	
-	function view (task){
+	
+		// Collection of all tasks
+		var tasks = this.collection;
+		tasks.fetch().done(function(){
+			tasks.each(function(task){
+				var view = new TaskItemView({
+					model: task,
+					collection: tasks
+				});
+			});
+		});
+	
+	},
+
+	show: function(id){
+
+		var collection = this.collection;
+		var task;
+
+		task = this.collection.get(id);
 		var view = new TaskShowView({
 			model: task
 		});
+
+	},
+
+	edit: function(params){
+		var app = this;
+	
+		var split = params.split('?');
+		var id = split[0];
+		var query = split[1];
+	
+		var task = this.collection.get(id);
+		var data = parseQueryString(query);
+
+		task.set('job', {
+			name: data.jobName,
+			arguments: JSON.parse(data.jobArguments)
+		});
+	
+		delete data.jobName;
+		delete data.jobArguments;
+	
+		// change model data
+		task.set(data);
+		task.save().done(function(data){
+			app.navigate('init', {trigger:true});
+		});
+	},
+
+	search: function(query, page) {
+		alert('ok');
 	}
-	
-	task = this.collection.get(id);
-	var view = new TaskShowView({
-		model: task
-	});
-
-  },
-
-  edit: function(params){
-	var app = this;
-	
-	var split = params.split('?');
-	var id = split[0];
-	var query = split[1];
-	
-	var task = this.collection.get(id);
-	var data = parseQueryString(query);
-
-	task.set('job', {
-		name: data.jobName,
-		arguments: JSON.parse(data.jobArguments)
-	});
-	
-	delete data.jobName;
-	delete data.jobArguments;
-	
-	// change model data
-	task.set(data);
-	task.save().done(function(data){
-		app.navigate('init', {trigger:true});
-	});
-  },
-
-  search: function(query, page) {
-	alert('ok');
-  }
 
 });
 
