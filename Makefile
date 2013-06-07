@@ -7,41 +7,59 @@ run=${var}/run
 default:
 	# Install local modules
 	npm install
-install-app:
-	cd app
-	npm install
-	cd ..
-	grunt couchapp
-	# Install basic app in couchdb
-	./tasks/install/db/push
 	
-install:
-	# install lib and cli global
-	sudo npm install -g
-	#create database in couchdb using config.json data
-	./tasks/install/db/create
-	# create jobs folder
+clean:
+	rm -rf node_modules
+	rm -rf jobs/node_modules
+	rm -rf app/node_modules
+	
+build-jobs:
+	# Build default folder
+	cd jobs
+	npm install .
+	cd ..
+	
+create-folders:
 	cp -R jobs ${etc}/${name}
 	# worker logs folder
 	mkdir ${var}/${name}
 	# worker process pids
 	mkdir ${run}/${name}
-	make install-app
-
-update:
-	# install lib and cli global
-	make default
-	sudo npm install -g
-	make install-app
-
-uninstall:
-	# Unistall modules to run jake tasks
-	sudo npm uninstall ${name} -g
-	# remove database created by installation
-	./tasks/uninstall/db/destroy
+	
+remove-folders:
 	# remove jobs folder
 	rm -rf ${etc}/${name}
 	# remove worker logs folder
 	rm -rf ${var}/${name}
 	# remove worker process pids
 	rm -rf ${run}/${name}
+
+install-app:
+	#sudo npm install grunt-cli -g
+	# Install basic app in couchdb
+	cd app
+	npm install
+	cd ..
+	./tasks/install/db/push
+	
+update:
+	# install lib and cli global
+	make default
+	# Upload the and web ui model to datastore 
+	make install-app
+	# install lib and cli global
+	sudo npm install . -g
+	
+install:
+	# Create runinig directories
+	make create-folders
+	# create database in couchdb using config.json data
+	./tasks/install/db/create
+	make update
+
+uninstall:
+	# Unistall modules to run jake tasks
+	sudo npm uninstall ${name} -g
+	# remove database created by installation
+	./tasks/uninstall/db/destroy
+	make remove-folders
