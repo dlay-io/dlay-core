@@ -1,3 +1,4 @@
 module.exports = {
-	myjob: require("./myjob")
+	myjob: require("./myjob"),
+	webhook: require("./webhook")
 };

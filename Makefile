@@ -16,7 +16,7 @@ clean:
 build-jobs:
 	# Build default folder
 	cd jobs
-	npm install .
+	npm install
 	cd ..
 	
 create-folders:
@@ -51,6 +51,8 @@ update:
 	sudo npm install . -g
 	
 install:
+	# Install default jobs deps
+	make build-jobs
 	# Create runinig directories
 	make create-folders
 	# create database in couchdb using config.json data
