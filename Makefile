@@ -15,9 +15,7 @@ clean:
 	
 build-jobs:
 	# Build default folder
-	cd jobs
-	npm install
-	cd ..
+	npm install  ./jobs --prefix ./jobs
 	
 create-folders:
 	cp -R jobs ${etc}/${name}
