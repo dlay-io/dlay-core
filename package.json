@@ -2,7 +2,7 @@
   "name": "after",
   "version": "0.1.0",
   "description": "Software to schedule your tasks",
-  "author": "Gabriel de Oliveira Barbosa <manobi.oliveira@gmail.com>",
+  "author": "Adlayer Soluções Tecnológicas <adlayer@adlayer.org>",
   "bin": {
     "after": "./bin/worker"
   },
