@@ -2,7 +2,7 @@ requirejs.config({
 	baseUrl: 'components'
 });
 
-require(['ace/build/src/ace']);
+require(['https://raw.github.com/ajaxorg/ace-builds/master/src/ace.js']);
 
 
 function parseQueryString (queryString){

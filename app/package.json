@@ -1,7 +1,9 @@
 {
   "name": "app",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+	"bower": "x.x.x"
+  },
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-copy": "~0.4.0",

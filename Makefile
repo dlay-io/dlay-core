@@ -33,10 +33,9 @@ remove-folders:
 	rm -rf ${run}/${name}
 
 install-app:
-	#sudo npm install grunt-cli -g
 	# Install basic app in couchdb
 	cd app
-	npm install
+	bower install
 	cd ..
 	./tasks/install/db/push
 	
