@@ -6,6 +6,7 @@ run=${var}/run
 
 default:
 	# Install local modules
+	sudo npm install -g bower
 	npm install
 	
 clean:
@@ -35,7 +36,7 @@ remove-folders:
 install-app:
 	# Install basic app in couchdb
 	cd app
-	bower install
+	#bower install
 	cd ..
 	./tasks/install/db/push
 	
