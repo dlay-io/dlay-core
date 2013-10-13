@@ -6,8 +6,8 @@ run=${var}/run
 
 default:
 	# Install local modules
-	sudo npm install -g bower
 	npm install
+	./configure
 	
 clean:
 	rm -rf node_modules
@@ -36,13 +36,10 @@ remove-folders:
 install-app:
 	# Install basic app in couchdb
 	cd app
-	#bower install
 	cd ..
 	./tasks/install/db/push
 	
 update:
-	# install lib and cli global
-	make default
 	# Upload the and web ui model to datastore 
 	make install-app
 	# install lib and cli global

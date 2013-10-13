@@ -230,8 +230,6 @@ Create a user in Couchdb with name ***"after"*** and ***"after"*** as password. 
 Install it by run inside the After's folder:
 
 ```
-$ npm install .
-$ ./configure
 $ make
 $ make install
 ```

@@ -4,7 +4,7 @@ var config = require('./config');
 var fs = require('fs');
 
 
-console.log('Configure your node-office dabatase connection:');
+console.log('Configure your after dabatase connection:');
 console.log('Type new to subscribe or hit enter to use default');
 program
 	.prompt('login: ', function(login){
