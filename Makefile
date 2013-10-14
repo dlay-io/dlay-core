@@ -35,8 +35,7 @@ remove-folders:
 
 install-app:
 	# Install basic app in couchdb
-	cd app
-	cd ..
+	cd app && ../node_modules/bower/bin/bower install
 	./tasks/install/db/push
 	
 update:
