@@ -17,13 +17,29 @@
     </head>
     <body>
         <div class="container">
-			<div id="changes">
-				Here goes the livestream
+			<h4><a href="/tasks/_design/app/index.html">Tasks</a></h4>
+			<div>
+				<form>
+					<legend>Worker:</legend>
+					<input type="radio" name='gWorker' />
+					<label>Todos</label>
+					<input type="radio" name='gWorker' />
+					<input type="text" />
+				</form>
 			</div>
+			<ul id="statusFilter">
+				<li><a href="#all">All</a></li>
+				<li><a href="#failed">Failed</a></li>
+				<li><a href="#waiting">Waiting</a></li>
+				<li><a href="#scheduled">Scheduled</a></li>
+				<li><a href="#done">Done</a></li>
+			</ul>
             <div class="tasks">
-                <h1><a href="/tasks/_design/app/index.html">Tasks</a></h1>
-                <ul id="tasks"></ul>
+				<div id="changes">
+					Here goes the livestream
+				</div>
 				<div id="context"></div>
+                <ul id="tasks"></ul>
             </div>
         </div>
 
@@ -89,14 +105,6 @@
 				</fieldset>
 			{{/repeat}}
 		</script>
-		
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-        <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
-        </script>
 
         <!-- build:js scripts/main.js -->
         <script src="http://requirejs.org/docs/release/2.1.8/minified/require.js"></script>

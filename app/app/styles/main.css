@@ -1,8 +1,15 @@
-body {
-    background: #fafafa;
+.tasks #changes {
+	background:red;
+	width:300px;
+	float:left;
+	height:800px;
 }
-
-.hero-unit {
-    margin: 50px auto 0 auto;
-    width: 300px;
+#tasks {
+	background:yellow;
+	display:block;
+	width:500px;
+}
+.tasks #context {
+	float:right;
+	width:300px;
 }

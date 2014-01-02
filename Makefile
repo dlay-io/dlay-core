@@ -6,6 +6,7 @@ run=${var}/run
 
 default:
 	# Install local modules
+	sudo npm install bower -g
 	npm install
 	./configure
 	
@@ -48,7 +49,7 @@ install:
 	# Install default jobs deps
 	make build-jobs
 	# Create runinig directories
-	make create-folders
+	sudo make create-folders
 	# create database in couchdb using config.json data
 	./tasks/install/db/create
 	make update

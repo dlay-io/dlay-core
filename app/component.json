@@ -7,7 +7,7 @@
 	"underscore": "1.4.4",
 	"backbone": "1.0.0",
 	"hogan": "x.x.x",
-	"requirejs": "x.x.x",
+	"requirejs": "2.1.8",
 	"ace": "x.x.x"
   },
   "devDependencies": {}

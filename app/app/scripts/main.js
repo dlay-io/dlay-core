@@ -74,8 +74,6 @@ var Tasks = Backbone.Collection.extend({
 	}
 });
 
-
-
 /**
 * View for task item list
 *
@@ -274,15 +272,16 @@ var Router = Backbone.Router.extend({
 
 	routes: {
 		"init":   "init",
+		"all": "all",
+		'waiting': 'waiting',
 		"show/:id": "show",
 		"edit/:id": "edit",
 		"search/:query":        "search",  // #search/kiwis
 		"search/:query/p:page": "search"   // #search/kiwis/p7
 	},
-
-	collection: new Tasks(),
-	init: function() {
 	
+	init: function() {
+		
 		$(function(){
 			$('body').delegate('a', 'click', function(e){
 				e.preventDefault();
@@ -294,7 +293,17 @@ var Router = Backbone.Router.extend({
 			});
 		});
 	
+		// List all tasks
+		this.all();
 	
+	},
+	
+	all: function(){
+		var $tasks = $('#tasks');
+		$tasks.html('');
+		
+		this.collection = new Tasks();
+		
 		// Collection of all tasks
 		var tasks = this.collection;
 		tasks.fetch().done(function(){
@@ -305,9 +314,8 @@ var Router = Backbone.Router.extend({
 				});
 			});
 		});
-	
 	},
-
+	
 	show: function(id){
 
 		var collection = this.collection;
