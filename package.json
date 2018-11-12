@@ -1,0 +1,26 @@
+{
+  "name": "node-after",
+  "version": "2.0.0",
+  "description": "Node scheduled tasks framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adlayer/after.git"
+  },
+  "keywords": [
+    "shedule",
+    "scheduling",
+    "cron",
+    "tasks",
+    "worker"
+  ],
+  "author": "Gabriel de Oliveira Barbosa (Manobi)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adlayer/after/issues"
+  },
+  "homepage": "https://github.com/adlayer/after#readme"
+}
