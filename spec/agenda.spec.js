@@ -1,5 +1,5 @@
-const {expect} = require('chai');
-const Agenda = require('../lib/agenda');
+const {expect} = require('chai'),
+    Agenda = require('../lib/agenda');
 
 describe('Agenda', () => {
     const agenda = new Agenda();
