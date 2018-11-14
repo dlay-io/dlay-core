@@ -1,20 +1,29 @@
-const {expect} = require('chai'),
-    Agenda = require('../lib/agenda');
+const Agenda = require('../lib/agenda'),
+    chai = require('chai'),
+    sinon = require('sinon'),
+    sinonChai = require('sinon-chai');
+
+chai.use(sinonChai);
 
 describe('Agenda', () => {
-    const agenda = new Agenda();
+    const {expect} = chai.expect;
+    let agenda = {};
+
+    beforeEach(() => {
+        agenda = new Agenda();
+    });
 
     describe('#constructor', () => {
         it('Extends node event emittter', () => {
             expect(agenda).to.have.property('emit');
         });
     });
-    describe('#add', () => {
-        it('add an event listener to a timestamp', () => {
-            const event = new Date('05 October 2011 14:48 UTC');
+    describe('add', () => {
+        agenda.add('3d0ca315-aff9–4fc2-be61–3b76b9a2d798', {
+            date: '',
 
-            event.toISOString();
-            agenda.add('');
         });
     });
+    describe('get');
+    describe('remove');
 });
