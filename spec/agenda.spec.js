@@ -18,12 +18,7 @@ describe('Agenda', () => {
             expect(agenda).to.have.property('emit');
         });
     });
-    describe('add', () => {
-        agenda.add('3d0ca315-aff9–4fc2-be61–3b76b9a2d798', {
-            date: '',
-
-        });
-    });
+    describe('add');
     describe('get');
     describe('remove');
 });
