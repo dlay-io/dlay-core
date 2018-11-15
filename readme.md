@@ -83,3 +83,6 @@ const worker = new Worker(options, (ctx, done) => {
     done();
 });
 ```
+
+### Comming soon
+This version is not published yet and should be considered as a working in progress.
