@@ -31,22 +31,27 @@ Define your job entry point and starting script on `package.json`
 }
 ```
 
-Run it from terminal
+Start the worker:
 ```bash
 npm start
 ```
 
-It will start a job proccess listening for tasks updates from a Couchdb database from `localhost:5984`, assined to a worker called `my-worker`. 
-You can pass more different connection options using the [-o](#) flag.
+It will start receiveing and processing tasks for the worker `my-worker`, from a databse listening at `localhost:5984`.
 
-Create tasks for your job processor
+In order to create tasks for the worker:
 ```bash
-npx after task '{"url":"http://google.com.br"}'
+npx after task 2018-11-20:10:20 -w my-worker -d '{"url":"http://google.com"}'
+// task created id: 3d0ca315-aff9–4fc2-be61–3b76b9a2d798
 ```
+
+Thats all! The worker will execute your tasks precisely on the given date and time.
 
 ## CLI - Command line interface
 ```bash
-after <command> -options
+after [command] [options]
+    Commands:
+        worker - Starts a dlay worker
+        task - creates a task
 ```
 
 ## Programatic API
@@ -59,10 +64,10 @@ after <command> -options
 * Task
 * Context
 
-### clock(precision:number)
+### Clock(precision:number)
 ```javascript
-const {clock} = require('dlay');
-const clock = clock(1000); // Specify the precision you want
+const {Clock} = require('dlay');
+const clock = Clock(1000); // Specify the precision you want
 clock.on('2018-10-12', (ctx, done) => {
     console.log(ctx.task);
 });
