@@ -9,12 +9,13 @@ chai.use(sinonChai);
 describe('Agenda', () => {
     const {expect} = chai;
     let clock = {};
-    
+
     describe('#stop', () => {
         it('stops the interval', () => {
             const precision = 1000;
 
             clock = new Clock(precision);
+
             clock.start();
             clock.stop();
             expect(clock.interval).to.be.equal(null);
@@ -29,8 +30,8 @@ describe('Agenda', () => {
 
         it('Starts the timer that triggers in precision intervals', (done) => {
             const now = DateTime.local(),
-                precision = 1,
-                future = now.plus({'seconds': 3}),
+                precision = 1000,
+                future = now.plus({'seconds': 3}).startOf('second'),
                 timestamp = future.toMillis();
 
             clock = new Clock(precision);
@@ -39,6 +40,6 @@ describe('Agenda', () => {
                 done();
             });
             clock.start();
-        }).timeout(5000);
+        }).timeout(4000);
     });
 });
