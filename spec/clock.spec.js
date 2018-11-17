@@ -1,7 +1,6 @@
 const Clock = require('../lib/clock'),
     {DateTime} = require('luxon'),
     chai = require('chai'),
-    sinon = require('sinon'),
     sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
@@ -31,15 +30,18 @@ describe('Agenda', () => {
         it('Starts the timer that triggers in precision intervals', (done) => {
             const now = DateTime.local(),
                 precision = 1000,
+                // eslint-disable-next-line sort-vars
                 future = now.plus({'seconds': 3}).startOf('second'),
                 timestamp = future.toMillis();
 
             clock = new Clock(precision);
             clock.on(timestamp, (res) => {
-                expect(res).to.be.equal('done');
+                expect(res).to.be.equal(timestamp);
                 done();
             });
             clock.start();
+        // eslint-disable-next-line no-magic-numbers
         }).timeout(4000);
+
     });
 });
