@@ -36,15 +36,15 @@ Start the worker:
 npm start
 ```
 
-It will start receiveing and processing tasks for the worker `my-worker`, from a databse listening at `localhost:5984`.
+It will start receiveing and processing tasks for the worker `my-worker`, from a databse listening at `http://localhost:5984`.
 
 In order to create tasks for the worker:
 ```bash
-npx after task 2018-11-20:10:20 -w my-worker -d '{"url":"http://google.com"}'
+npx after task 2018-11-20:10:20 -w processor -d method:GET,url:http://google.com
 // task created id: 3d0ca315-aff9–4fc2-be61–3b76b9a2d798
 ```
 
-Thats all! The worker will execute your tasks precisely on the given date and time.
+Thats all! the worker will execute your tasks precisely on the given date and time.
 
 ## CLI - Command line interface
 ```bash
@@ -72,16 +72,32 @@ clock.on('2018-10-12', (ctx, done) => {
     console.log(ctx.task);
 });
 ```
-### Worker(connection:object, name:string)
-```javascript
-const connection = {host:'localhost', port: 5984},
-    {Worker} = require('dlay');
 
-const worker = new Worker(options, (ctx, done) => {
+### Scheduler(connection:object, worker:string, job:function)
+```javascript
+const scheduler = new Scheduler(connection, worker, (ctx, done) => {
+    done();
+});
+```
+
+### Worker(connection:object, name:string, job:function)
+```javascript
+const job = (ctx, done) => {
     const {task, http} = ctx;
     http.get(task.url);
     done();
-});
+}
+```
+
+```javascript
+const {Worker} = require('dlay');
+const job = require('./index');
+
+const connection = {host:'localhost', port: 5984},
+const worker = new Worker({
+    connection,
+    name: 'Optimizer'
+}, job);
 ```
 
 ### Comming soon
