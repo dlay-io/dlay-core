@@ -26,11 +26,12 @@ describe('Scheduler', () => {
     let scheduler;
     beforeEach(() => {
         scheduler = new Scheduler({
-            database: 'dlay_tasks',
-            host: 'localhost',
-            user: 'worker',
-            password: 'root',
-            seq: ''
+            precision: 1000
+            // database: 'dlay_tasks',
+            // host: 'localhost',
+            // user: 'worker',
+            // password: 'root',
+            // seq: ''
         });
     });
     
