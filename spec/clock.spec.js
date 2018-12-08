@@ -1,11 +1,12 @@
 const Clock = require('../lib/clock'),
     {DateTime} = require('luxon'),
     chai = require('chai'),
+    sinon = require('sinon'),
     sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 
-describe('Agenda', () => {
+describe('Clock', () => {
     const {expect} = chai;
     let clock = {};
 
@@ -33,12 +34,9 @@ describe('Agenda', () => {
                 // eslint-disable-next-line sort-vars
                 future = now.plus({'seconds': 3}).startOf('second'),
                 timestamp = future.toMillis();
-
+                
             clock = new Clock(precision);
-            clock.on(timestamp, (res) => {
-                expect(res).to.be.equal(timestamp);
-                done();
-            });
+            clock.on(timestamp, done);
             clock.start();
         // eslint-disable-next-line no-magic-numbers
         }).timeout(4000);

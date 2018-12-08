@@ -17,44 +17,32 @@ const change = {
 }
 const task = change.doc;
 
-const jobs = {
-    encode: () => {},
-    clear: () => {}
-}
-
 describe('Scheduler', () => {
     let scheduler;
     beforeEach(() => {
         scheduler = new Scheduler({
             precision: 1000
-            // database: 'dlay_tasks',
-            // host: 'localhost',
-            // user: 'worker',
-            // password: 'root',
-            // seq: ''
         });
     });
-    
-    //scheduler.emit('change', task);
 
     describe('#schedule', () => {
         it('append the task to memory book', () => {
-            const date = new Date().getTime(),
-                job = jobs[task.job];
-            
-            scheduler.schedule({id: task._id, date, job});
+            const date = new Date(),
+                task = {id: '857957d1f1631ac8714b5d1cfd000d39', date};
+                
+            scheduler.schedule(task, () => {});
             const totalScheduledTasks = scheduler.tasks.listenerCount(date);
             expect(totalScheduledTasks).to.be.equal(1);
-            expect(scheduler.scheduled[task._id].run).to.be.a('function');
+            expect(scheduler.scheduled[task.id].run).to.be.a('function');
         });
     });
     describe('#unschedule', () => {
         it('removes a task from memory', () => {
-            const date = new Date().getTime(),
-                job = jobs[task.job];
+            const date = new Date(),
+                task = {id: '857957d1f1631ac8714b5d1cfd000d39', date};
             
-            scheduler.schedule({id: task._id, date, job});
-            scheduler.unschedule(task._id);
+            scheduler.schedule(task, () => {});
+            scheduler.unschedule(task.id);
             const totalScheduledTasks = scheduler.tasks.listenerCount(date);
             expect(totalScheduledTasks).to.be.equal(0);
         });
