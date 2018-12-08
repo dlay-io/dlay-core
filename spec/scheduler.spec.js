@@ -1,21 +1,6 @@
-const Scheduler = require('../lib/scheduler');
-const {expect} = require('chai');
-
-const change = {
-    seq:'31-g1AAAACbeJzLYWBgYMpgTmEQTM4vTc5ISXLIyU9OzMnILy7JAUklMiTV____PyuDOZEjFyjAbmaelGZuboJNAx5j8liAJEMDkPoPNU0cbFqqpWmqsQVW07IAa8kwow',
-    id: '857957d1f1631ac8714b5d1cfd000d39',
-    changes: [ { rev: '2-d6c43bec951f93843bdd085f440a02fc' } ],
-    doc: { 
-        _id: '857957d1f1631ac8714b5d1cfd000d39',
-        _rev: '2-d6c43bec951f93843bdd085f440a02fc',
-        date: '2012-02-27',
-        status: 'waiting',
-        worker: 'manobi',
-        data: { url: 'https://google.com' },
-        job: 'clear'
-    }
-}
-const task = change.doc;
+const Scheduler = require('../lib/scheduler'),
+    {DateTime} = require('luxon'),
+    {expect} = require('chai');
 
 describe('Scheduler', () => {
     let scheduler;
@@ -27,19 +12,39 @@ describe('Scheduler', () => {
 
     describe('#schedule', () => {
         it('append the task to memory book', () => {
-            const date = new Date(),
-                task = {id: '857957d1f1631ac8714b5d1cfd000d39', date};
+            const now = DateTime.local(),
+                date = now.plus({'seconds': 20}).toISO(),
+                timestamp = DateTime.fromISO(date).toMillis(),
+                task = {
+                    date,
+                    id: '857957d1f1631ac8714b5d1cfd000d39'
+                };
                 
             scheduler.schedule(task, () => {});
-            const totalScheduledTasks = scheduler.tasks.listenerCount(date);
+            const totalScheduledTasks = scheduler.tasks.listenerCount(timestamp);
             expect(totalScheduledTasks).to.be.equal(1);
             expect(scheduler.scheduled[task.id].run).to.be.a('function');
         });
+        it('immediatly run an outdated task', () => {
+            const now = DateTime.local(),
+                date = now.minus({'seconds': 3}).toISO(),
+                task = {
+                    date,
+                    id: '857957d1f1631ac8714b5d1cfd000d39'
+                };
+                scheduler.schedule(task, () => {});
+                expect(scheduler.scheduled[task.id]).to.be.undefined;
+        });
     });
+
     describe('#unschedule', () => {
         it('removes a task from memory', () => {
-            const date = new Date(),
-                task = {id: '857957d1f1631ac8714b5d1cfd000d39', date};
+            const now = DateTime.local(),
+                date = now.plus({'seconds': 30}).toISO(),
+                task = {
+                    date,
+                    id: '857957d1f1631ac8714b5d1cfd000d39'
+                };
             
             scheduler.schedule(task, () => {});
             scheduler.unschedule(task.id);
