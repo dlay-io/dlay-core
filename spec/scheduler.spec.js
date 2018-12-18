@@ -5,9 +5,7 @@ const Scheduler = require('../lib/scheduler'),
 describe('Scheduler', () => {
     let scheduler;
     beforeEach(() => {
-        scheduler = new Scheduler({
-            precision: 1000
-        });
+        scheduler = new Scheduler(1000);
     });
 
     describe('#schedule', () => {
