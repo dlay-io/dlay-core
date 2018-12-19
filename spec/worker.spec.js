@@ -1,5 +1,13 @@
 const {expect} = require('chai');
 const Worker = require('../lib/worker');
+const sinon = require('sinon');
+
+class MockAdaptor {
+    connect(){};
+    createConnection(){}
+    subscribe(){}
+    update(){}
+}
 
 const fixture = {
     "last_seq": "5-g1AAAAIreJyVkEsKwjAURZ-toI5cgq5A0sQ0OrI70XyppcaRY92J7kR3ojupaSPUUgotgRd4yTlwbw4A0zRUMLdnpaMkwmyF3Ily9xBwEIuiKLI05KOTW0wkV4rruP29UyGWbordzwKVxWBNOGMKZhertDlarbr5pOT3DV4gudUC9-MPJX9tpEAYx4TQASns2E24ucuJ7rXJSL1BbEgf3vTwpmedCZkYa7Pulck7Xt7x_usFU2aIHOD4eEfVTVA5KMGUkqhNZV-8_o5i",
@@ -40,19 +48,42 @@ const fixture = {
 }
 
 describe('Worker', () => {
-    describe('#construct', () => {
-        it('without name throws an exception', () => {
-            expect(new Worker()).to.throw();
-            /*
-            new Worker({
-                precision: 1000,
-                database: 'dlay_tasks',
-                hostname: '127.0.0.1',
-                name: 'manobi'
-                username: 'admin',
-                password: 'admin'
-            });
-            */
+    let worker;
+    beforeEach(() => {
+        worker = new Worker({
+            name: 'manobi'
+        }, MockAdaptor);
+        worker.addJob('test', () =>{});
+    });
+
+    describe('#constructor', () => {
+        it('Without name throws an exception', () => {
+            const fn = () => new Worker()
+            expect(fn).to.throw(Error, 'The attribute "name" is required to construct Workers');
+        });
+    });
+    
+    describe('#addJob', () => {
+        it('add a function with its name to the job list', () => {
+            const job = (ctx, done) => {};
+            worker.addJob('convert', job);
+            expect(worker.jobs.convert).to.be.equal(job);
+        });
+    });
+
+    describe('#changeHandler', () => {
+        it('Schedules a valid tasks', () => {
+            const spy = sinon.spy(worker, 'schedule');
+            const change = {
+                id: '9299191',
+                date: '2018-11-05',
+                job: 'test'
+            }
+            worker.changeHandler(change);
+            expect(spy).calledWithMatch(change);
+        });
+        it('Do not Schedules an invalid task', () => {
+            expect(worker.changeHandler).to.throw(Error);
         });
     });
 });
