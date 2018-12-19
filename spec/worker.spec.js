@@ -1,5 +1,6 @@
 const {expect} = require('chai');
 const Worker = require('../lib/worker');
+const Context = require('../lib/context');
 const sinon = require('sinon');
 
 class MockAdaptor {
@@ -53,7 +54,9 @@ describe('Worker', () => {
         worker = new Worker({
             name: 'manobi'
         }, MockAdaptor);
-        worker.addJob('test', () =>{});
+        worker.addJob('test', (ctx, done) =>{
+            done(null, true);
+        });
     });
 
     describe('#constructor', () => {
@@ -84,6 +87,18 @@ describe('Worker', () => {
         });
         it('Do not Schedules an invalid task', () => {
             expect(worker.changeHandler).to.throw(Error);
+        });
+    });
+
+    describe('#createContext', () => {
+        it('Wraps the task into a Context instance', () => {
+            const ctx = worker.createContext({
+                id: '9299191',
+                date: '2018-11-05',
+                job: 'test'
+            });
+            expect(ctx).to.be.an.instanceOf(Context)
+            
         });
     });
 });
