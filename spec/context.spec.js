@@ -66,4 +66,37 @@ describe('Context', () => {
             expect(ctx.repeatable()).to.be.equal(false);
         });
     });
+    describe('#next', () => {
+        it('Failure without retry option', () => {
+            const task = {
+                id: '101020teste2010',
+                date: '2018-12-20T12:14:25.864Z',
+                job: 'compress',
+                worker: 'manobi',
+                data: {
+                    src: 'https://images.dog.ceo/breeds/pointer-german/n02100236_1941.jpg',
+                    level: 100
+                }
+            }
+            const ctx = new Context(task);
+            ctx.start();
+            ctx.stop();
+            const next = {
+                ...task,
+                status: 'failed',
+                error: {error: true},
+                duration: ctx.duration
+            };
+            
+            expect(ctx.next({error: true})).to.be.deep.equal(next);
+        });
+    });
 });
+
+
+/*
+status,
+result,
+error,
+duration
+*/
