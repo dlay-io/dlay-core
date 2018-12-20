@@ -98,7 +98,6 @@ describe('Worker', () => {
                 job: 'test'
             });
             expect(ctx).to.be.an.instanceOf(Context)
-            
         });
     });
 });
