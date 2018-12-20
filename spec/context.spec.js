@@ -67,8 +67,9 @@ describe('Context', () => {
         });
     });
     describe('#next', () => {
-        it('Failure without retry option', () => {
-            const task = {
+        let task = {};
+        beforeEach(() => {
+            task = {
                 id: '101020teste2010',
                 date: '2018-12-20T12:14:25.864Z',
                 job: 'compress',
@@ -78,6 +79,9 @@ describe('Context', () => {
                     level: 100
                 }
             }
+        });
+
+        it('Failure without retry option', () => {
             const ctx = new Context(task);
             ctx.start();
             ctx.stop();
@@ -85,10 +89,24 @@ describe('Context', () => {
                 ...task,
                 status: 'failed',
                 error: {error: true},
+                result: false,
                 duration: ctx.duration
             };
-            
             expect(ctx.next({error: true})).to.be.deep.equal(next);
+        });
+
+        it('Sucess without repeat option', () => {
+            const ctx = new Context(task);
+            ctx.start();
+            ctx.stop();
+            const next = {
+                ...task,
+                status: 'complete',
+                error: null,
+                result: {success: true},
+                duration: ctx.duration
+            };
+            expect(ctx.next(null, {success: true})).to.be.deep.equal(next);
         });
     });
 });
