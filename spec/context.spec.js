@@ -81,7 +81,7 @@ describe('Context', () => {
             }
         });
 
-        it('Failure without retry option', () => {
+        it('Error without retry option is failed', () => {
             const ctx = new Context(task);
             ctx.start();
             ctx.stop();
@@ -95,13 +95,62 @@ describe('Context', () => {
             expect(ctx.next({error: true})).to.be.deep.equal(next);
         });
 
-        it('Sucess without repeat option', () => {
+        it('Error with retry option is retry and future date', () => {
+            const retryableTask = {
+                ...task,
+                retries: 1,
+                retry: {
+                    limit: 2,
+                    interval: {
+                        year: 1
+                    }
+                }
+            };
+            const ctx = new Context(retryableTask);
+            ctx.start();
+            ctx.stop();
+            const next = {
+                ...retryableTask,
+                date: '2019-12-20T12:14:25.864Z',
+                status: 'retry',
+                error: {error: true},
+                result: false,
+                duration: ctx.duration
+            };
+            expect(ctx.next({error: true})).to.be.deep.equal(next);
+        });
+
+        it('Success without repeat option', () => {
             const ctx = new Context(task);
             ctx.start();
             ctx.stop();
             const next = {
                 ...task,
                 status: 'complete',
+                error: null,
+                result: {success: true},
+                duration: ctx.duration
+            };
+            expect(ctx.next(null, {success: true})).to.be.deep.equal(next);
+        });
+        it('Success of repeatable task sets done and future date', () => {
+            const repeatableTask = {
+                ...task,
+                repetitions: 1,
+                repeat: {
+                    limit: 2,
+                    interval: {
+                        year: 1
+                    }
+                }
+            };
+            const ctx = new Context(repeatableTask);
+            ctx.start();
+            ctx.stop();
+            const next = {
+                ...repeatableTask,
+                date: '2019-12-20T12:14:25.864Z',
+                status: 'done',
                 error: null,
                 result: {success: true},
                 duration: ctx.duration
