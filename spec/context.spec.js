@@ -133,6 +133,7 @@ describe('Context', () => {
             };
             expect(ctx.next(null, {success: true})).to.be.deep.equal(next);
         });
+
         it('Success of repeatable task sets done and future date', () => {
             const repeatableTask = {
                 ...task,
