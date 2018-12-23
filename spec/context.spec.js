@@ -74,6 +74,7 @@ describe('Context', () => {
                 date: '2018-12-20T12:14:25.864Z',
                 job: 'compress',
                 worker: 'manobi',
+                retries: 0,
                 data: {
                     src: 'https://images.dog.ceo/breeds/pointer-german/n02100236_1941.jpg',
                     level: 100
@@ -81,8 +82,12 @@ describe('Context', () => {
             }
         });
 
-        it('Error without retry option is failed', () => {
-            const ctx = new Context(task);
+        it('Increment the execution counter', () => {
+            const incrementalTask = {
+                ...task,
+                executions: 1
+            }
+            const ctx = new Context(incrementalTask);
             ctx.start();
             ctx.stop();
             const next = {
@@ -90,81 +95,121 @@ describe('Context', () => {
                 status: 'failed',
                 error: {error: true},
                 result: false,
-                duration: ctx.duration
+                duration: ctx.duration,
+                executions: 2,
+                repetitions: 0
             };
             expect(ctx.next({error: true})).to.be.deep.equal(next);
         });
 
-        it('Error with retry option is retry and future date', () => {
-            const retryableTask = {
-                ...task,
-                retries: 1,
-                retry: {
-                    limit: 2,
-                    interval: {
-                        year: 1
-                    }
-                }
-            };
-            const ctx = new Context(retryableTask);
-            ctx.start();
-            ctx.stop();
-            const next = {
-                ...retryableTask,
-                date: '2019-12-20T12:14:25.864Z',
-                status: 'retry',
-                error: {error: true},
-                result: false,
-                duration: ctx.duration
-            };
-            expect(ctx.next({error: true})).to.be.deep.equal(next);
-        });
+        describe('When error', () => {
+            it('without retry the status is "failed"', () => {
+                const ctx = new Context(task);
+                ctx.start();
+                ctx.stop();
+                const next = {
+                    ...task,
+                    status: 'failed',
+                    error: {error: true},
+                    result: false,
+                    duration: ctx.duration,
+                    executions: 1,
+                    repetitions: 0
+                };
+                expect(ctx.next({error: true})).to.be.deep.equal(next);
+            });
 
-        it('Success without repeat option', () => {
-            const ctx = new Context(task);
-            ctx.start();
-            ctx.stop();
-            const next = {
-                ...task,
-                status: 'complete',
-                error: null,
-                result: {success: true},
-                duration: ctx.duration
-            };
-            expect(ctx.next(null, {success: true})).to.be.deep.equal(next);
-        });
-
-        it('Success of repeatable task sets done and future date', () => {
-            const repeatableTask = {
-                ...task,
-                repetitions: 1,
-                repeat: {
-                    limit: 2,
-                    interval: {
-                        year: 1
+            it('with retry the status is retry and future date', () => {
+                const retryableTask = {
+                    ...task,
+                    retries: 1,
+                    retry: {
+                        limit: 2,
+                        interval: {
+                            year: 1
+                        }
                     }
-                }
-            };
-            const ctx = new Context(repeatableTask);
-            ctx.start();
-            ctx.stop();
-            const next = {
-                ...repeatableTask,
-                date: '2019-12-20T12:14:25.864Z',
-                status: 'done',
-                error: null,
-                result: {success: true},
-                duration: ctx.duration
-            };
-            expect(ctx.next(null, {success: true})).to.be.deep.equal(next);
+                };
+                const ctx = new Context(retryableTask);
+                ctx.start();
+                ctx.stop();
+                const next = {
+                    ...retryableTask,
+                    date: '2019-12-20T12:14:25.864Z',
+                    status: 'retry',
+                    error: {error: true},
+                    result: false,
+                    duration: ctx.duration,
+                    executions: 1,
+                    repetitions: 0
+                };
+                expect(ctx.next({error: true})).to.be.deep.equal(next);
+            });
+        });     
+
+        describe('When success', () => {
+            it('without repeat option', () => {
+                const ctx = new Context(task);
+                ctx.start();
+                ctx.stop();
+                const next = {
+                    ...task,
+                    status: 'complete',
+                    error: null,
+                    result: {success: true},
+                    duration: ctx.duration,
+                    executions: 1,
+                    repetitions: 0
+                };
+                expect(ctx.next(null, {success: true})).to.be.deep.equal(next);
+            });
+
+            it('with retries reset attempts', () => {
+                const ctx = new Context({
+                    ...task,
+                    retries: 3
+                });
+                ctx.start();
+                ctx.stop();
+                const next = {
+                    ...task,
+                    status: 'complete',
+                    retries: 0,
+                    error: null,
+                    result: {success: true},
+                    duration: ctx.duration,
+                    executions: 1,
+                    repetitions: 0
+                };
+                expect(ctx.next(null, {success: true})).to.be.deep.equal(next);
+            });
+
+            it('with repeat status is done and future date', () => {
+                const repeatableTask = {
+                    ...task,
+                    repetitions: 1,
+                    repeat: {
+                        limit: 2,
+                        interval: {
+                            year: 1
+                        }
+                    }
+                };
+                const ctx = new Context(repeatableTask);
+                ctx.start();
+                ctx.stop();
+                const next = {
+                    ...repeatableTask,
+                    date: '2019-12-20T12:14:25.864Z',
+                    status: 'done',
+                    error: null,
+                    result: {success: true},
+                    duration: ctx.duration,
+                    repetitions: 1,
+                    executions: 1
+                };
+                expect(ctx.next(null, {success: true})).to.be.deep.equal(next);
+            });
         });
     });
 });
-
-
-/*
-status,
-result,
-error,
-duration
-*/
