@@ -3,39 +3,24 @@ A modern framework for all your scheduled tasks
 
 ## Features
 * 📅 Human-friendly scheduling (unlike cron jobs)
-* ⚛️ Lightweight accurate trigger
+* ⚛️ Lightweight accurate triggers
 * 🔁 Repeatable tasks
 * ❌ Error handling tools (logs, retries intervals & limits)
 * ✅ Task dependancy workflows
 * 📈 Statistics about your tasks (repetition, retries, execution & duration)
 
-### Jobs
-Jobs are single-purpose functions triggered by tasks running by workers.
-```javascript
-module.exports = (ctx, done) => done();
-```
-### Tasks
-Once a job like "charge-customer" is running by a worker, you can trigger it with tasks as the following:
-```json
-{
-  "date": "2018-12-23T09:21:44.000Z",
-  "job": "charge-customer",
-  "worker": "manobi",
-  "data":{
-      "customer_id": 35
-  }
-}
-```
-
-### Worker
-A Worker is a process running a job waiting and processing tasks assigned to it. Distribuite your workers across how many servers servers you need.
+### Simple 3 steps workflow
+1. Create a worker
+2. Register a job
+3. Assign tasks for the worker to proccess
 
 ## Installation
-After having a `CouchDB` instance installed and running
+After having a `CouchDB` instance installed and running:
 
 ```bash
 npm install --save dlay-core
 ```
+> Dlay Core only officially supports CouchDB as backend storage, but you can create your own custom adapter. For the next version we are discussing support for MongoDB, Redis and Amazon Dynamo. Would you like to help?
 
 ## Usage (example)
 Create a simple `job` capable of making GET HTTP requests to a later defined url. Exports it as a function with params `ctx` and `done`.
@@ -43,11 +28,11 @@ Create a simple `job` capable of making GET HTTP requests to a later defined url
 ```javascript
 // index.js
 const fetch = require('node-fetch');
-module.exports = async (ctx, done) => {
-    // Extracts task and http variables from context
-    const {task, http} = ctx;
-    // Makes the request and finishes the job with the response
-    return fetch(task.data.url).then(done);
+// Export a functions as module
+module.exports = (ctx, done) => {
+    return fetch(task.data.url).then(async () => {
+
+    });
 });
 ```
 
@@ -77,46 +62,19 @@ npx after task 2018-11-20:10:20 -w processor -d method:GET,url:http://google.com
 Thats all! the worker will execute your tasks precisely on the given date and time.
 
 ## Task options
-```json
-{
-  "date": "2018-12-23T09:21:44.000Z",
-  "status": "done",
-  "data": {
-    "url": "https://google.com",
-    "user": "test"
-  },
-  "retry": {
-    "interval": {
-      "seconds": 1
-    }
-  },
-  "repeat": {
-    "interval": {
-      "minutes": 1,
-      "seconds": 20
-    }
-  },
-  "repetitions": 0,
-  "job": "compress",
-  "worker": "manobi",
-  "duration": 651.106972,
-  "executions": 201,
-  "retries": 0,
-  "error": null,
-  "result": {
-    "success": true,
-    "msg": "Data have being cached"
-  }
-}
-```
-
-## CLI - Command line interface
-```bash
-dlay [command] [options]
-    Commands:
-        worker - Starts a dlay worker
-        task - creates a task
-```
+* Date
+* Status
+* Data
+* Job
+* Worker
+* Repeat
+* Retry
+* Repetitions (readonly)
+* Retries (readonly)
+* Duration (readonly)
+* Executions (readonly)
+* Result (readonly)
+* Error (readonly)
 
 ## Programatic API
 
