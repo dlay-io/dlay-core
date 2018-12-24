@@ -9,7 +9,7 @@ A modern framework for all your scheduled tasks
 * ✅ Task dependancy workflows
 * 📈 Statistics about your tasks (repetition, retries, execution & duration)
 
-### Simple 3 steps workflow
+### Simple workflow
 1. Create a worker
 2. Register a job
 3. Assign tasks for the worker to proccess
@@ -62,22 +62,22 @@ npx after task 2018-11-20:10:20 -w processor -d method:GET,url:http://google.com
 Thats all! the worker will execute your tasks precisely on the given date and time.
 
 ## Task options
-* Date
-* Status
-* Data
-* Job
-* Worker
-* Repeat
-* Retry
-* Dependancies
-* Id (readonly)
-* History (readonly)
-* Repetitions (readonly)
-* Retries (readonly)
-* Duration (readonly)
-* Executions (readonly)
-* Result (readonly)
-* Error (readonly)
+* [Date](#date)
+* [Status](#status)
+* [Data](#data)
+* [Job](#job)
+* [Worker](#worker)
+* [Repeat](#repeat)
+* [Retry](#retry)
+* [Dependencies](#dependencies)
+* [Id (readonly)](#id-readonly)
+* [History (readonly)](#history-readonly)
+* [Repetitions (readonly)](#repetitions-readonly)
+* [Retries (readonly)](#retries-readonly)
+* [Duration (readonly)](#duration-readonly)
+* [Executions (readonly)](#executions-readonly)
+* [Result (readonly)](#result-readonly)
+* [Error (readonly)](#error-readonly)
 
 ### Date
 ISO 8601 format of date and time in UTC. It's used to schedule the first time you want a task to run. Later it will be used to repeat or retries.
@@ -142,7 +142,7 @@ Just like repeat, retry options accepts an object with `limit` and `interval`.
 }
 ```
 
-### Dependancies
+### Dependencies
 Specify an array of task's ids which you can use at execution time to decide if and how it should run, based on the status of other tasks you depend.
 
 ### Id (readonly)
