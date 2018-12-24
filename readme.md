@@ -7,7 +7,7 @@ A modern framework for all your scheduled tasks
 * 🔁 Repeatable tasks
 * ❌ Error handling tools (logs, retries intervals & limits)
 * ✅ Task dependancy workflows
-* 📈 Statics about your tasks (repetition, retries, execution & duration)
+* 📈 Statistics about your tasks (repetition, retries, execution & duration)
 
 ### Jobs
 Jobs are single-purpose functions triggered by tasks running by workers.
