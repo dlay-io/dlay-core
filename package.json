@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha spec"
   },
+  "engines" : { "node" : ">=10.13.0" }
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adlayer/after.git"
