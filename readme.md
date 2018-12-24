@@ -69,12 +69,60 @@ Thats all! the worker will execute your tasks precisely on the given date and ti
 * Worker
 * Repeat
 * Retry
+* Dependancies
+* Id (readonly)
+* History (readonly)
 * Repetitions (readonly)
 * Retries (readonly)
 * Duration (readonly)
 * Executions (readonly)
 * Result (readonly)
 * Error (readonly)
+
+### Date
+ISO 8601 format of date and time in UTC. It's used to schedule the first time you want a task to run. Later it will be used to repeat or retries.
+
+### Status
+Task's current status, it starts with ```waiting``` but can chante to ```scheduled```, ```running```, ```cancel```, ```retry```, ```complete``` or ```done```.
+
+### Data
+Payload you would to pass as argument for the job. It might be and Object, String, Array or whatever you can use on a JSON file.
+
+### Job
+A string matching one of the jobs you have added to the worker. A single worker may proccess as many jobs as you want. However we recommend running only one job per worker in production.
+
+### Worker
+Since every worker is connected to the storage listening for changes, you have to specify with worker you want to perform the task. Always ensure that the worker you assigned a task have the task job registered.
+
+### Repeat
+Define frequency ```interval``` and ```limit``` of a task.
+Intervals can be representented with ISO 8601 interval notation or as an object (thanks to luxon.js).
+```json
+{
+    "date": "",
+    "repeat": {
+        "limit": 4,
+        "interval": "P1M2DT1H10M5S"
+    }
+}
+```
+Is exactly the same as
+```json
+{
+    "date": "",
+    "repeat": {
+        "limit": 4,
+        "interval": {
+            "month": 1, 
+            "day": 2, 
+            "hour": 1, 
+            "minute": 10, 
+            "seconds": 5
+        }
+    }
+}
+```
+
 
 ## Programatic API
 
