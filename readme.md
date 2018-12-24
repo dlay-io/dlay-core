@@ -145,30 +145,30 @@ Just like repeat, retry options accepts an object with `limit` and `interval`.
 ### Dependancies
 Specify an array of task's ids which you can use at execution time to decide if and how it should run, based on the status of other tasks you depend.
 
-## Id (readonly)
+### Id (readonly)
 Every task have it's own ID and it can vary based on your backend storage implementation. If you are using the built-in CouchDB storage adaptor it's going to be a UUID string.
 
-## History (readonly)
+### History (readonly)
 
-## Repetitions (readonly)
+### Repetitions (readonly)
 Integer of how many times a task have run, after it's initial schedule.
 
-## Retries (readonly)
+### Retries (readonly)
 After the first failure it starts incrementing until it reaches retry limit or succeed.
 
-## Duration (readonly)
+### Duration (readonly)
 Describe how much time a task took execution the job in milleseconds.
 
-## Executions (readonly)
+### Executions (readonly)
 The ammount of task's executions counting initial scheduling, repetitions and retries.
 
-## Result (readonly)
+### Result (readonly)
 The result object you commited using
 ```javascript
 done(null, {success: true, msg: "Web crawling done"});
 ```
 
-## Error (readonly)
+### Error (readonly)
 If something went wrong during the execution of your task, a timeout or a user informed object
 ```javascript
 done({error: true, 'Something went wrong'});
