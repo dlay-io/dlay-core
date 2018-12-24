@@ -23,7 +23,7 @@
     "worker"
   ],
   "author": "Gabriel de Oliveira Barbosa (Manobi)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dlayio/dlay/issues"
   },
