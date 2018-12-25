@@ -79,4 +79,26 @@ describe('Worker', () => {
             expect(ctx).to.be.an.instanceOf(Context)
         });
     });
+
+    describe('#enqueue', () => {
+        it('creates a queue', () => {
+            const queue = worker.enqueue('559933', done => done());
+            expect(worker.enqueue('559933', done => done())).to.an('object');
+        });
+    
+        it('return the previous queue', () => {
+            const queue = worker.enqueue('559933', (done) => {
+                // never calls done();
+            });
+            worker.enqueue('559933', () => {});
+            expect(queue.length).to.be.equal(2);
+        });
+        it('destroy itself when is idle', () => {
+            worker.enqueue('11222333', done => done());
+            worker.enqueue('11222333', done => done());
+            process.nextTick(() => {
+                expect(worker.queues[11222333]).to.be.undefined;
+            });
+        });
+    });
 });
