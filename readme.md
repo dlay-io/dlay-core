@@ -13,11 +13,6 @@ A modern framework for all your scheduled tasks
 * ✅ Task dependancy workflows
 * 📈 Statistics about your tasks (repetition, retries, execution & duration)
 
-### Simple workflow
-1. Create a worker
-2. Register a job
-3. Assign tasks for the worker to proccess
-
 ## Installation
 After having a `CouchDB` instance installed and running:
 
@@ -27,9 +22,10 @@ npm install --save dlay-core
 > Dlay Core only officially supports CouchDB as backend storage, but you can create your own custom adapter. For the next version we are discussing support for MongoDB, Redis and Amazon Dynamo. Would you like to help?
 
 ## Usage (example)
+
 ```javascript
 const fetch = require('node-fetch');
-const {Worker, createTask} = require('dlay-core');
+const { Worker } = require('dlay-core');
 
 // 1. Create a Worker
 const worker = new Worker({name: 'manobi'});
@@ -40,16 +36,19 @@ worker.addJob('compress', (ctx, done) => {
         done(null, {worker: true});
     });
 });
+```
 
-// 3. Assign tasks
+```javascript
+// 3. Assign tasks for the worker
+const { createTask } = require('dlay-core');
 createTask({
     "date": "2018-12-23T09:21:44.000Z",
+    "worker": "manobi",
+    "job": "compress",
     "data": {
         "url": "https://google.com",
         "user": "test"
-    },
-    "job": "compress",
-    "worker": "manobi"
+    }
 });
 ```
 
@@ -208,7 +207,7 @@ const job = require('./index');
 const connection = {host:'localhost', port: 5984},
 const worker = new Worker({
     connection,
-    name: 'Optimizer'
+    name: 'optimizer'
 }, job);
 ```
 

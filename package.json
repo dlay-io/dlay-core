@@ -42,6 +42,7 @@
   "dependencies": {
     "luxon": "^1.7.1",
     "nano": "^7.1.1",
+    "node-fetch": "^2.3.0",
     "queue": "^5.0.0"
   }
 }
