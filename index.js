@@ -10,6 +10,8 @@ worker.addJob('compress', async (ctx, done) => {
     //done(null, {sucesso: 'muleque'});
 
     // Async exec
+    const deps = await ctx.deps();
+    console.log(deps);
     const res = await fetch('https://dog.ceo/api/breeds/image/random');
     return res.json();
     
