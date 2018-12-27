@@ -8,7 +8,7 @@ describe('Context', () => {
             const ctx = new Context({});
             ctx.done = done;
             ctx.startTimeout();
-            expect(ctx.timeout._called).to.be.equal(false);
+            expect(ctx.timeout).to.not.be.equal(undefined);
             ctx.stop();
             done();
         });
