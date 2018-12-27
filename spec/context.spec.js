@@ -55,6 +55,32 @@ describe('Context', () => {
         });
     });
 
+    describe('cancel', () => {
+        const ctx = new Context({});
+        it('aborts an execution', (done) => {
+            let spy = sinon.spy();
+            ctx.done = done;
+            ctx.start((ctx, done) => {
+                setTimeout(spy, 1000);
+            });
+            ctx.cancel();
+            expect(spy).to.not.have.been.called;
+            ctx.stop();
+            done();
+        });
+        it('calls clearTimeout', (done) => {
+            let spy = sinon.spy(global, 'clearTimeout');
+            ctx.done = done;
+            ctx.start((ctx, done) => {
+                setTimeout(done, 1000);
+            });
+            ctx.cancel();
+            expect(spy).to.have.been.called;
+            ctx.stop();
+            done();
+        });
+    });
+
     describe('#retryable', () => {
         it('Returns the date/time it is going to retry', () => {
             const ctx = new Context({
@@ -119,6 +145,7 @@ describe('Context', () => {
             expect(ctx.repeatable()).to.be.equal(false);
         });
     });
+    
     describe('#next', () => {
         let task = {};
         const job = (ctx, done) => {
