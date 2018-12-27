@@ -1,7 +1,60 @@
 const Context = require('../lib/context');
 const { expect } = require('chai');
+const sinon = require('sinon');
 
 describe('Context', () => {
+    describe('#startTimeout', () => {
+        it('sets the execution timeout', (done) => {
+            const ctx = new Context({});
+            ctx.done = done;
+            ctx.startTimeout();
+            expect(ctx.timeout._called).to.be.equal(false);
+            ctx.stop();
+            done();
+        });
+    });
+    describe('#start', () => {
+        const ctx = new Context({});
+        it('Starts a timeout', (done) => {
+            ctx.done = done;
+            const spy = sinon.spy(ctx, 'startTimeout');
+            ctx.start((ctx, done) => {
+                expect(spy.called).to.be.ok;
+                ctx.stop();
+                spy.restore();
+                done();
+            });
+        });
+        it('Execute sync job', (done) => {
+            ctx.done = () => {
+                ctx.stop();
+                done();
+            };
+            ctx.start((ctx, done) => {
+                done();
+            });
+        });
+        it('Execute resolved job', (done) => {
+            ctx.done = () => {
+                ctx.stop();
+                done();
+            };
+            ctx.start(async (ctx, done) => {
+                return Promise.resolve(true);
+            });
+        });
+        it('Execute rejected job', (end) => {
+            ctx.done = (err, res) => {
+                expect(err).to.exist;
+                ctx.stop();
+                end();
+            };
+            ctx.start((ctx, done) => {
+                return Promise.reject(new Error('Rejected test'));
+            });
+        });
+    });
+
     describe('#retryable', () => {
         it('Returns the date/time it is going to retry', () => {
             const ctx = new Context({
