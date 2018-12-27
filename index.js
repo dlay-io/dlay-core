@@ -5,12 +5,14 @@ const worker = new Worker({
     database: 'dlay_tasks'
 });
 
-worker.addJob('compress', (ctx, done) => {
+worker.addJob('compress', async (ctx, done) => {
     //fast exec
     //done();
-    fetch('https://dog.ceo/api/breeds/image/random').then(async (res) => {
-        done(null, {worker: true});
-    })
+
+    // Async exec
+    //const res = await fetch('https://dog.ceo/api/breeds/image/random');
+    //return res.json();
+    
     // failed
     //done({deu: 'ruim'});
 
@@ -18,5 +20,5 @@ worker.addJob('compress', (ctx, done) => {
     //done(null, {deu: 'certo'});
 
     //long run
-    //setTimeout(done, 200000000);
+    setTimeout(() => done(null, 'acabou'), 200000000);
 });
