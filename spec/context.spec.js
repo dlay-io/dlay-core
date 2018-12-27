@@ -68,6 +68,9 @@ describe('Context', () => {
     });
     describe('#next', () => {
         let task = {};
+        const job = (ctx, done) => {
+            done();
+        }
         beforeEach(() => {
             task = {
                 id: '101020teste2010',
@@ -88,8 +91,11 @@ describe('Context', () => {
                 executions: 1
             }
             const ctx = new Context(incrementalTask);
-            ctx.start();
-            ctx.stop();
+            ctx.done = () => {
+                ctx.stop();
+            }
+            ctx.start(job);
+            
             const next = {
                 ...task,
                 status: 'failed',
@@ -105,8 +111,10 @@ describe('Context', () => {
         describe('When error', () => {
             it('without retry the status is "failed"', () => {
                 const ctx = new Context(task);
-                ctx.start();
-                ctx.stop();
+                ctx.done = () => {
+                    ctx.stop();
+                }
+                ctx.start(job);
                 const next = {
                     ...task,
                     status: 'failed',
@@ -131,8 +139,10 @@ describe('Context', () => {
                     }
                 };
                 const ctx = new Context(retryableTask);
-                ctx.start();
-                ctx.stop();
+                ctx.done = () => {
+                    ctx.stop();
+                }
+                ctx.start(job);
                 const next = {
                     ...retryableTask,
                     date: '2019-12-20T12:14:25.864Z',
@@ -150,8 +160,10 @@ describe('Context', () => {
         describe('When success', () => {
             it('without repeat option', () => {
                 const ctx = new Context(task);
-                ctx.start();
-                ctx.stop();
+                ctx.done = () => {
+                    ctx.stop();
+                }
+                ctx.start(job);
                 const next = {
                     ...task,
                     status: 'complete',
@@ -169,8 +181,10 @@ describe('Context', () => {
                     ...task,
                     retries: 3
                 });
-                ctx.start();
-                ctx.stop();
+                ctx.done = () => {
+                    ctx.stop();
+                }
+                ctx.start(job);
                 const next = {
                     ...task,
                     status: 'complete',
@@ -196,8 +210,10 @@ describe('Context', () => {
                     }
                 };
                 const ctx = new Context(repeatableTask);
-                ctx.start();
-                ctx.stop();
+                ctx.done = () => {
+                    ctx.stop();
+                }
+                ctx.start(job);
                 const next = {
                     ...repeatableTask,
                     date: '2019-12-20T12:14:25.864Z',

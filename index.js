@@ -7,11 +7,11 @@ const worker = new Worker({
 
 worker.addJob('compress', async (ctx, done) => {
     //fast exec
-    //done();
+    //done(null, {sucesso: 'muleque'});
 
     // Async exec
-    //const res = await fetch('https://dog.ceo/api/breeds/image/random');
-    //return res.json();
+    const res = await fetch('https://dog.ceo/api/breeds/image/random');
+    return res.json();
     
     // failed
     //done({deu: 'ruim'});
@@ -20,5 +20,10 @@ worker.addJob('compress', async (ctx, done) => {
     //done(null, {deu: 'certo'});
 
     //long run
-    setTimeout(() => done(null, 'acabou'), 200000000);
+    
+    // setTimeout(() => {
+    //     console.log('long exec');
+    //     done(null, 'acabou');
+    // }, 200000000);
+    
 });
