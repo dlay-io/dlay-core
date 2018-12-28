@@ -34,6 +34,17 @@ describe('Context', () => {
                 done();
             });
         });
+        it('Execute troblesome sync job', (done) => {
+            ctx.done = (err) => {
+                ctx.stop();
+                expect(err).to.exist;
+                done();
+            };
+
+            ctx.start((ctx, done) => {
+                throw new Error('Bad job');
+            });
+        });
         it('Execute resolved job', (done) => {
             ctx.done = () => {
                 ctx.stop();
