@@ -1,31 +1,14 @@
-const fetch = require('node-fetch');
 const Worker = require('./lib/worker');
-const worker = new Worker({
-    name: 'manobi',
-    database: 'dlay_tasks'
-});
+const Task = require('./lib/task');
+const CouchdbAdaptor = require('./lib/couchdb-adaptor');
 
-worker.addJob('compress', async (ctx, done) => {
-    //fast exec
-    //done(null, {sucesso: 'muleque'});
-
-    // Async exec
-    const deps = await ctx.deps();
-    console.log(deps);
-    const res = await fetch('https://dog.ceo/api/breeds/image/random');
-    return res.json();
-    
-    // failed
-    //done({deu: 'ruim'});
-
-    // Success msg
-    //done(null, {deu: 'certo'});
-
-    //long run
-    
-    // setTimeout(() => {
-    //     console.log('long exec');
-    //     done(null, 'acabou');
-    // }, 200000000);
-    
-});
+module.exports = (connection = {}, Adaptor = CouchdbAdaptor) => {
+    return {
+        worker(name, options = connection, Adaptor = CouchdbAdaptor){
+            return  new Worker({ ...options, name }, Adaptor);
+        },
+        createTask(info, options = connection, Adaptor = CouchdbAdaptor){
+            return new Task(info, options, Adaptor).save();
+        }
+    }
+}
