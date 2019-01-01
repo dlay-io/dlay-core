@@ -167,6 +167,7 @@ done({error: true, 'Something went wrong'});
 ## FAQ
 
 ### Crontab vs Dlay-core
+
 Differently from crontab Dlay-Core was designed easily to let you run the same job (script) with different contexts.
 
 With crontab if need a script to run every minute:
@@ -191,5 +192,20 @@ When using crontab for batch processing like syncing products what do you do whe
 Those are the problems Dlay-Core was created to solve.
 
 ### Job queues vs Dlay-core
+Job queues processing like RabbitMQ, ZeroMQ, Amazon SQS, Ruby Resque, Python Celery or Node.js Bull or Kue are known for their implementation of FIFO ( first in, first out) algorithm.
+
+The first in, first out perfect for queued job processing and have being adapted from the logistics world into computing. 
+
+The parallel to the fisical world makes it easy to understand the difference between task queues and task scheduling.
+
+In an ecommerce distribution center the first that arrives at the logistic department should be the priority to leave the building otherwise customers starts to get crazy.
+
+Job queues impleting this same protocol have being th goto solution for then your are doing background processing for long running tasks.
+
+Now imagine a medicine distributor, products like this have a expiracy date. If they are not delivered in the right date and time it's would unuseful and some times after the privacy date it's better if it never come.
+
+Instead of FIFO Dlay-Core implements a methd called FEFO (First-Expire, First-Out), it have being design that no matter how many tasks do you have to proccess but ensure that tasks are in the ecxact time it was scheduled to run.
+
+Dlay does not have task priorization mechanism like RabbitMQ and other since it take as priority the date and time a task was assined.
 
 ### Agenda vs Dlay-core
