@@ -2,7 +2,7 @@ const fetch = require('node-fetch'),
     { worker, createTask } = require('..')(),
     manobi = worker('manobi-fast');
     
-manobi.addJob('compress', async (ctx, done) => {
+manobi.addJob('compress', (ctx, done) => {
     done(null, {sucesso: 'muleque'});
 });
 
