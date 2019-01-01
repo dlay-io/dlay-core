@@ -24,17 +24,16 @@ npm install --save dlay-core
 ## Usage (example)
 
 ```javascript
-const fetch = require('node-fetch');
-const { Worker } = require('dlay-core');
+// 1. Get a worker by givin it a name (ex: manobi)
+const fetch = require('node-fetch'),
+    { worker, createTask } = require('dlay-core')(),
+    manobi = worker('manobi');
 
-// 1. Create a Worker
-const worker = new Worker({name: 'manobi'});
-
-// 2. Register job
-worker.addJob('compress', (ctx, done) => {
-    return fetch('https://dog.ceo/api/breeds/image/random').then(async (res) => {
-        done(null, {worker: true});
-    });
+// 2. Register a job for the worker
+manobi.addJob('dognizer', async (ctx, done) => {
+    // Async exec
+    const res = await fetch('https://dog.ceo/api/breeds/image/random');
+    return res.json();
 });
 ```
 
@@ -44,9 +43,9 @@ const { createTask } = require('dlay-core');
 createTask({
     "date": "2018-12-23T09:21:44.000Z",
     "worker": "manobi",
-    "job": "compress",
+    "job": "dognizer",
     "data": {
-        "url": "https://google.com",
+        "url": "https://dog.ceo/api/breeds/image/random",
         "user": "test"
     }
 });
@@ -165,51 +164,32 @@ If something went wrong during the execution of your task, a timeout or a user i
 done({error: true, 'Something went wrong'});
 ```
 
-## Programatic API
+## FAQ
 
-* Clock
-* Scheduler
-* Worker
-* Job
-* Client
-* Task
-* Context
+### Crontab vs Dlay-core
+Differently from crontab Dlay-Core was designed easily to let you run the same job (script) with different contexts.
 
-### Clock(precision:number)
-```javascript
-const {Clock} = require('dlay');
-const clock = Clock(1000); // Specify the precision you want
-clock.on('2018-10-12', (ctx, done) => {
-    console.log(ctx.task);
-});
+With crontab if need a script to run every minute:
+
+```bash
+*/1 * * * * ./jobs/collect-customer-usage.js
 ```
 
-### Scheduler(connection:object, worker:string, job:function)
-```javascript
-const scheduler = new Scheduler(connection, worker, (ctx, done) => {
-    done();
-});
-```
+But what if you have to run something like "collect usage from customer abc at october 6" and "collect usage from customer xyz at october 12", then you would have to access your server and setup a different "cron job" for each of your customer. 
 
-### Worker(connection:object, name:string, job:function)
-```javascript
-const job = (ctx, done) => {
-    const {task, http} = ctx;
-    http.get(task.url);
-    done();
-}
-```
+Imagine now that customer "abc" is not one of your users anymore, you have again to access the server and remove this job.
 
-```javascript
-const {Worker} = require('dlay');
-const job = require('./index');
+Since most backend frameworks have some kind of integration with the native crontab, if you have to perform application level scheduling people usualy uses cron to trigger app scripts that connects the database and do batch processing.
 
-const connection = {host:'localhost', port: 5984},
-const worker = new Worker({
-    connection,
-    name: 'optimizer'
-}, job);
-```
+When your cron job invoke some database query it's done something Dlay was designed to avoid it's called "Pulling".
 
-### Comming soon
-This version is not published yet and should be considered as a working in progress.
+Lets say your application deal with campaign date management like e-mail marketing delivery, display media campaign or ecommerce platform product offer. In order to be precise about when the campaign starts and ends you would have make your cron job to be triggered every second. If you have to start a single campaign today at midnight, your job would have uselessly being trigger 86400 times and queried your database 86400 only to be effective at the last run.
+
+With you handling a multitenancy architecture where each tentant have their own database then you have to do the same process for every single database on your datacenter.
+
+When using crontab for batch processing like syncing products what do you do when a single product sync fail?
+Those are the problems Dlay-Core was created to solve.
+
+### Job queues vs Dlay-core
+
+### Agenda vs Dlay-core
