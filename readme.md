@@ -77,12 +77,33 @@ Task's current status, it starts with ```waiting``` but can chante to ```schedul
 
 ### Data
 Payload you would to pass as argument for the job. It might be and Object, String, Array or whatever you can use on a JSON file.
+```json
+{
+    "date": "2019-01-01T13:45:39.564Z",
+    "data": {
+        "url": "https://google.com.br",
+        "position": 3
+    }
+}
+```
 
 ### Job
 A string matching one of the jobs you have added to the worker. A single worker may proccess as many jobs as you want. However we recommend running only one job per worker in production.
+```json
+{
+    "date": "2019-01-01T13:45:39.564Z",
+    "job": "compress-video"
+}
+```
 
 ### Worker
 Since every worker is connected to the storage listening for changes, you have to specify with worker you want to perform the task. Always ensure that the worker you assigned a task have the task job registered.
+```json
+{
+    "date": "2019-01-01T13:45:39.564Z",
+    "worker": "east-video-compress"
+}
+```
 
 ### Repeat
 Define frequency ```interval``` and ```limit``` of a task.
@@ -134,6 +155,13 @@ Just like repeat, retry options accepts an object with `limit` and `interval`.
 
 ### Dependencies
 Specify an array of task's ids which you can use at execution time to decide if and how it should run, based on the status of other tasks you depend.
+{
+    "date": "2019-01-01T13:45:39.564Z",
+    "dependencies": [
+        "f1a718d1deaa20479577239a6b00a1ec", "bf9f490f1e0d29131a0da86b68c86d61"
+    ]
+}
+```
 
 ### Id (readonly)
 Every task have it's own ID and it can vary based on your backend storage implementation. If you are using the built-in CouchDB storage adaptor it's going to be a UUID string.
