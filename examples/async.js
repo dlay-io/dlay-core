@@ -1,14 +1,17 @@
 const fetch = require('node-fetch'),
     { worker, createTask } = require('..')(),
-    manobi = worker('manobi');
+    manobi = worker('manobi-async');
 
-const manobi = worker('manobi');
 manobi.addJob('compress', async (ctx, done) => {
     setTimeout(() => {
         done(null, 'acabou');
     }, 3000);
 });
+
 (async () => {
-    const res = await createTask({date: new Date().toISOString()});
-    console.log(res);
+    return createTask({
+        date: new Date().toISOString(),
+        job: 'compress',
+        worker: 'manobi-async'
+    });
 })();

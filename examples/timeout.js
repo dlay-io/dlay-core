@@ -1,14 +1,19 @@
 const fetch = require('node-fetch');
-const dlay = require('../')({database: 'dlay_tasks'}),
+const dlay = require('../')(),
     { worker, createTask } = dlay;
 
-const manobi = worker('manobi');
-manobi.addJob('compress', async (ctx, done) => {
+const manobi = worker('manobi-timeout');
+manobi.addJob('compress', (ctx, done) => {
     // never calls done will reach the task timeout
-    setTimeout(() => {
-        console.log(this.tasks);
-    }, 50000);
+    return setTimeout(() => {
+        done('fail');
+    }, 6000);
 });
+
 (async () => {
-    const res = await createTask({date: new Date().toISOString()});
+    return createTask({
+        date: new Date().toISOString(),
+        job: 'compress',
+        worker: 'manobi-timeout'
+    });
 })();

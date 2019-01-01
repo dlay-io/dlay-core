@@ -1,6 +1,6 @@
 const fetch = require('node-fetch'),
     { worker, createTask } = require('..')(),
-    manobi = worker('manobi');
+    manobi = worker('manobi-promise');
     
 manobi.addJob('compress', async (ctx, done) => {
     // Async exec
@@ -8,7 +8,11 @@ manobi.addJob('compress', async (ctx, done) => {
     return res.json();
 });
 
+
 (async () => {
-    const res = await createTask({date: new Date().toISOString()});
-    console.log(res);
+    return createTask({
+        date: new Date().toISOString(),
+        job: 'compress',
+        worker: 'manobi-promise'
+    });
 })();
