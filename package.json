@@ -25,9 +25,9 @@
   "author": "Gabriel de Oliveira Barbosa (Manobi)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dlayio/dlay/issues"
+    "url": "https://github.com/dlay-io/dlay/issues"
   },
-  "homepage": "https://github.com/dlayio/dlay#readme",
+  "homepage": "https://github.com/dlay-io/dlay#readme",
   "devDependencies": {
     "c8": "^3.2.1",
     "coveralls": "^3.0.2",
@@ -37,12 +37,12 @@
     "chai": "^4.2.0",
     "eslint": "^5.9.0",
     "sinon": "^7.1.1",
-    "sinon-chai": "^3.2.0"
+    "sinon-chai": "^3.2.0",
+    "node-fetch": "^2.3.0"
   },
   "dependencies": {
     "luxon": "^1.7.1",
     "nano": "^7.1.1",
-    "node-fetch": "^2.3.0",
     "queue": "^5.0.0"
   }
 }
