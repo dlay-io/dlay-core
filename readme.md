@@ -209,3 +209,10 @@ Instead of FIFO Dlay-Core implements a methd called FEFO (First-Expire, First-Ou
 Dlay does not have task priorization mechanism like RabbitMQ and other since it take as priority the date and time a task was assined.
 
 ### Agenda vs Dlay-core
+Agendajs is a very popular job scheduling tool for node.js, it's uses MongoDB as backend while Dlay Core built-in support for CouchDB and allows you to create your own storage adaptor.
+
+Recently MongoDB launched Change Streams, which seems to be a mechanism similar to CouchDB Changes Feed what would allow us to support Mongo in the next versions but it looks like Agenda is not using this feature and chooses pulling methodology yet.
+
+Dlay-Core 2.0 was designed to be distribuited across many servers, that's what workers are for. If one of workers are into heavy load you can assing it's task to a new worker at database level which is not thay easy to do with Agenda.
+
+The initial release of Dlay-Core is actually a few months older (under the repo adlayer/after) than Agenda, but Dlay was never published on npm until version 2.0, where we came came to know the incredible work Agenda's community have being doing and kind was an inspiration for the project revitalization.
