@@ -1,9 +1,9 @@
 # Dlay Core
 A modern framework for all your scheduled tasks
 
-[ ![Codeship Status for dlayio/dlay-core](https://app.codeship.com/projects/dbaf9790-e9c4-0136-242c-1a2130adb44d/status?branch=master)](https://app.codeship.com/projects/319704)
+[ ![Codeship Status for dlay-io/dlay-core](https://app.codeship.com/projects/dbaf9790-e9c4-0136-242c-1a2130adb44d/status?branch=master)](https://app.codeship.com/projects/319704)
 
-[![Coverage Status](https://coveralls.io/repos/github/dlayio/dlay-core/badge.svg?branch=master)](https://coveralls.io/github/dlayio/dlay-core?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/dlay-io/dlay-core/badge.svg?branch=master)](https://coveralls.io/github/dlay-io/dlay-core?branch=master)
 
 ## Features
 * 📅 Human-friendly scheduling (unlike cron jobs)

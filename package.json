@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:dlayio/dlay-core.git"
+    "url": "git@github.com:dlay-io/dlay-core.git"
   },
   "keywords": [
     "shedule",
