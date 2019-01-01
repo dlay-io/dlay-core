@@ -155,6 +155,7 @@ Just like repeat, retry options accepts an object with `limit` and `interval`.
 
 ### Dependencies
 Specify an array of task's ids which you can use at execution time to decide if and how it should run, based on the status of other tasks you depend.
+```json
 {
     "date": "2019-01-01T13:45:39.564Z",
     "dependencies": [
