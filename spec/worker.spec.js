@@ -4,10 +4,25 @@ const Context = require('../lib/context');
 const sinon = require('sinon');
 
 class MockAdaptor {
-    connect(){};
-    createConnection(){}
-    subscribe(){}
-    update(){}
+    connect(){
+
+    }
+
+    createConnection(){
+
+    }
+
+    subscribe(){
+
+    }
+
+    update(){
+
+    }
+
+    unsubscribe(){
+        
+    }
 }
 
 describe('Worker', () => {
@@ -40,6 +55,14 @@ describe('Worker', () => {
             worker.addJob('convert', job);
             expect(worker.jobs.convert).to.be.equal(job);
         });
+    });
+
+    describe('#exit', () => {
+        it('calls adaptor unsubscribe method', () => {
+            const spy = sinon.spy(worker.storage, 'unsubscribe');
+            worker.exit()
+            expect(spy).to.have.been.called;
+        })
     });
 
     describe('#changeHandler', () => {
