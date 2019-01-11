@@ -7,15 +7,14 @@ manobi.addJob('compress', (ctx, done) => {
 });
 
 (async () => {
-    await manobi.start().then(() => {
-        return manobi.stop();
+    await manobi.start()
+    await createTask({
+        date: new Date().toISOString(),
+        job: 'compress',
+        worker: 'manobi-fast',
+        repeat: {
+            interval: {seconds: 1}
+        }
     });
-    // return createTask({
-    //     date: new Date().toISOString(),
-    //     job: 'compress',
-    //     worker: 'manobi-fast'
-    // }).then(() => {
-    //     manobi.tasks.stop();
-    //     return manobi.storage.unsubscribe();
-    // });
+    //await manobi.stop()
 })();
