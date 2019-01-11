@@ -35,6 +35,7 @@ describe('Worker', () => {
             done(null, true);
         });
     });
+
     afterEach(() => {
         worker.tasks.stop();
     })
@@ -60,7 +61,7 @@ describe('Worker', () => {
     describe('#exit', () => {
         it('calls adaptor unsubscribe method', () => {
             const spy = sinon.spy(worker.storage, 'unsubscribe');
-            worker.exit()
+            worker.stop();
             expect(spy).to.have.been.called;
         })
     });
