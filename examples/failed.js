@@ -8,6 +8,7 @@ manobi.addJob('compress', async (ctx, done) => {
 
 
 (async () => {
+    await manobi.start();
     return createTask({
         date: new Date().toISOString(),
         job: 'compress',

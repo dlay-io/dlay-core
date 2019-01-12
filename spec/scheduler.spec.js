@@ -20,7 +20,7 @@ describe('Scheduler', () => {
         it('Append the task to memory book', () => {
             const now = DateTime.local(),
                 date = now.plus({'seconds': 20}).toISO(),
-                timestamp = DateTime.fromISO(date).toMillis(),
+                timestamp = DateTime.fromISO(date).startOf('second').toMillis(),
                 task = {
                     date,
                     id: '857957d1f1631ac8714b5d1cfd000d39'
