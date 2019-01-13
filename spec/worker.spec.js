@@ -1,7 +1,11 @@
 const {expect} = require('chai');
 const Worker = require('../lib/worker');
 const Context = require('../lib/context');
+const chai = require('chai');
 const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+
+chai.use(sinonChai);
 
 class MockAdaptor {
     connect(){
@@ -58,7 +62,7 @@ describe('Worker', () => {
         });
     });
 
-    describe('#exit', () => {
+    describe('#stop', () => {
         it('calls adaptor unsubscribe method', () => {
             const spy = sinon.spy(worker.storage, 'unsubscribe');
             worker.stop();
