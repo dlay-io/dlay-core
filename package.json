@@ -1,6 +1,6 @@
 {
   "name": "dlay-core",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A modern framework for all your scheduled tasks",
   "main": "index.js",
   "scripts": {
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "luxon": "^1.10.0",
-    "nano": "^8.0.0",
+    "nano": "^7.1.1",
     "queue": "^5.0.0"
   }
 }

@@ -7,24 +7,17 @@ manobi.addJob('compress', (ctx, done) => {
 
 (async () => {
     await manobi.start()
-    /*await createTask({
+    await createTask({
         date: new Date().toISOString(),
         job: 'compress',
         status: 'waiting',
         worker: 'manobi-fast',
         repeat: {
-            limit: 10,
+            limit: 5,
             interval: {
-                seconds: 6
-            }
-        },
-        repeat: {
-            limit: 10,
-            interval: {
-                seconds: 1
+                seconds: 5
             }
         }
     });
-    */
     //await manobi.stop()
 })();
