@@ -1,5 +1,13 @@
 const { worker, createTask } = require('..')(),
-    manobi = worker('manobi-fast');
+    manobi = worker('manobi-fast', {
+        hostname: 'localhost',
+        port: 5984,
+        database: 'tasks'
+        /*
+        username: '',
+        password: '',
+        */
+    });
 
 manobi.addJob('compress', (ctx, done) => {
     done(null, {noerrorbaby: true});

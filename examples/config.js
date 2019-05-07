@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const dlay = require('../')({database: 'dlay_tasks'}),
+const dlay = require('../')({database: 'haduken'}),
     { worker, createTask } = dlay;
 
 const manobi = worker('manobi-config');
@@ -12,6 +12,7 @@ manobi.addJob('compress', async (ctx, done) => {
 });
 
 (async () => {
+    worker.start()
     return createTask({
         date: new Date().toISOString(),
         job: 'compress',
